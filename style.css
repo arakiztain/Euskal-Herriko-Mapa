@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  header {
+    text-align: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #ccc;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  main {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  #mapa-container {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    padding: 10px;
+    background-image: url('argazkiek/arrano.png'); /* Ruta de la imagen */
+    background-size: 450px 178px; /* Ajusta el tamaño para evitar distorsión */
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  
+  svg {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    transition: transform 0.2s ease;
+  }
+
+  #municipios-list {
+    flex: 0.7;
+    padding: 20px;
+    border-left: 2px solid #ccc;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+  }
+  
+  #total-global {
+    flex: 1;
+    padding: 20px;
+    border-left: 2px solid #ccc;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+  }
+
+  #municipios-list h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #municipios-list ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .provincia {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .municipio {
+    margin-left: 20px;
+  }
+
+  .porcentaje {
+    color: green;
+  }
+  #titulo-img {
+      width: 35px; /* Ajusta el tamaño de la imagen */
+      height: auto; /* Mantén la proporción de la imagen */
+  }
+  #titulo{
+      margin: 10;
+  }
+  #titulo-container{
+      display: flex; /* Alinea los hijos en fila */
+      align-items: center; /* Centra verticalmente la imagen y el texto */
+      gap: 10px; /* Espaciado entre la imagen y el texto */
+  }
+  #footer{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  #amnistia_img{
+      width: 25px; /* Ajusta el tamaño de la imagen */
+      height: auto; /* Mantén la proporción de la imagen */
+      margin-top: 20px;
+  }
+  
