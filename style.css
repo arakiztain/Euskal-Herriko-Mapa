@@ -214,6 +214,7 @@ svg {
     font-size: 16px;
     font-weight: bold;
     border-radius: 5px;
+    visibility: visible;
 }
 
 
