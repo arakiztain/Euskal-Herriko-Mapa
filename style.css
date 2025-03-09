@@ -29,8 +29,8 @@ body {
     align-items: center;
     overflow: auto;
     padding: 10px;
-    background-image: url('argazkiek/arrano.png'); /* Ruta de la imagen */
-    background-size: 450px 178px; /* Ajusta el tamaño para evitar distorsión */
+    background-image: url('argazkiek/arrano.png'); 
+    background-size: 450px 178px; 
     background-repeat: no-repeat;
     background-position: bottom left;
     position: relative;
@@ -85,16 +85,16 @@ body {
     color: green;
   }
   #titulo-img {
-      width: 35px; /* Ajusta el tamaño de la imagen */
-      height: auto; /* Mantén la proporción de la imagen */
+      width: 35px; 
+      height: auto; 
   }
   #titulo{
       margin: 10;
   }
   #titulo-container{
-      display: flex; /* Alinea los hijos en fila */
-      align-items: center; /* Centra verticalmente la imagen y el texto */
-      gap: 10px; /* Espaciado entre la imagen y el texto */
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
   }
   #footer{
       display: flex;
@@ -102,8 +102,59 @@ body {
       align-items: center;
   }
   #amnistia_img{
-      width: 25px; /* Ajusta el tamaño de la imagen */
-      height: auto; /* Mantén la proporción de la imagen */
+      width: 25px;
+      height: auto; 
       margin-top: 20px;
   }
   
+  @media only screen and (max-width: 768px) {
+    header{
+      padding: 0%;
+      font-size: 0.8rem;
+    }
+    #mapa-container {
+      flex: 8;
+      padding: 0;
+      background-size: 150px 78px;
+      padding-bottom: 0%; 
+    }
+    #municipios-list {
+      flex: 1;
+      padding: 1%;
+      width: 100%;
+    }
+    #titulo-container{
+      gap: 0;
+    }
+    #titulo-img {
+      width: 0; 
+    } 
+    #titulo{
+        margin: 10;
+        font-size: 0.5rem;
+    }
+    #provincia-list{
+      font-size: 0.4rem;
+    }
+    #municipios-list h2 {
+      text-align: left;
+      margin-bottom: 0;
+    }
+    .provincia {
+      font-weight: bold;
+      margin-top: 10%;
+    }
+  
+    .municipio {
+      font-weight: lighter;
+      margin-left: 7%;
+    }
+  
+    #amnistia_img{
+      width: 20%; 
+      margin-top: 2%;
+  }
+
+
+
+  }
