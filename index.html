@@ -29,6 +29,17 @@
 
   <script>
 
+    let menuBtn = document.createElement("button");
+    menuBtn.id = "menu-btn";
+    menuBtn.innerHTML = "☰";
+    document.body.appendChild(menuBtn);
+
+
+    menuBtn.addEventListener("click", function () {
+      let menu = document.getElementById("municipios-list");
+      menu.classList.toggle("active");
+    });
+
     fetch('/version.txt') // Un archivo con un número de versión
       .then(res => res.text())
       .then(version => {
@@ -146,7 +157,7 @@
 
             const provinciaDiv = document.createElement('div');
             provinciaDiv.className = 'provincia';
-            provinciaDiv.innerHTML = `${provincia} (${porcentaje.toFixed(2)}%)`;
+            provinciaDiv.innerHTML = `${provincia} (%${porcentaje.toFixed(2)})`;
 
             const ul = document.createElement('ul');
             selectedMunicipios.sort().forEach(id => {
@@ -164,7 +175,15 @@
           const porcentajeGlobal = totalMunicipiosGlobal > 0 ? (totalVisitadosGlobal / totalMunicipiosGlobal) * 100 : 0;
 
           // Actualizar el título con el porcentaje global
-          tituloElement.textContent = `Egondako herrialdetan (${porcentajeGlobal.toFixed(2)}%)`;
+          tituloElement.textContent = `Egondako herrialdetan (%${porcentajeGlobal.toFixed(2)})`;
+
+          //Mugikorrerako
+          let contadorPorcentaje = document.createElement("div");
+          contadorPorcentaje.id = "contador-porcentaje";
+          document.getElementById("mapa-container").appendChild(contadorPorcentaje);
+
+          // Mostrar el porcentaje con solo dos decimales
+          contadorPorcentaje.innerText = `Aurrerapena: %${porcentajeGlobal.toFixed(2)}`;
         }
 
 
