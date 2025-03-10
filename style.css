@@ -16,6 +16,18 @@ header {
   font-weight: bold;
 }
 
+#search-input {
+  padding: 5px;
+  font-size: 1em;
+}
+
+#search-button {
+  border-radius: 30%;
+  padding: 5px 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
 main {
   display: flex;
   flex-grow: 1;
