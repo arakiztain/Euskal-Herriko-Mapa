@@ -40,7 +40,7 @@
       menu.classList.toggle("active");
     });
 
-    fetch('/version.txt') // Un archivo con un número de versión
+    fetch('version.txt') // Un archivo con un número de versión
       .then(res => res.text())
       .then(version => {
         if (localStorage.getItem('version') !== version) {
@@ -183,7 +183,7 @@
           document.getElementById("mapa-container").appendChild(contadorPorcentaje);
 
           // Mostrar el porcentaje con solo dos decimales
-          contadorPorcentaje.innerText = `Aurrerapena: %${porcentajeGlobal.toFixed(2)}`;
+          contadorPorcentaje.innerText = `Euskal Herria: %${porcentajeGlobal.toFixed(2)}`;
         }
 
 
