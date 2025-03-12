@@ -158,7 +158,7 @@
 
             const provinciaDiv = document.createElement('div');
             provinciaDiv.className = 'provincia';
-            provinciaDiv.innerHTML = `${provincia} (%${porcentaje.toFixed(2)})`;
+            provinciaDiv.innerHTML = `${provincia} (% ${porcentaje.toFixed(2)})`;
 
             const ul = document.createElement('ul');
             selectedMunicipios.sort().forEach(id => {
@@ -176,7 +176,7 @@
           const porcentajeGlobal = totalMunicipiosGlobal > 0 ? (totalVisitadosGlobal / totalMunicipiosGlobal) * 100 : 0;
 
           // Actualizar el título con el porcentaje global
-          tituloElement.textContent = `Egondako herrialdetan (%${porcentajeGlobal.toFixed(2)})`;
+          tituloElement.textContent = `Egondako herrialdetan (% ${porcentajeGlobal.toFixed(2)})`;
 
           //Mugikorrerako
           let contadorPorcentaje = document.createElement("div");
@@ -184,7 +184,7 @@
           document.getElementById("mapa-container").appendChild(contadorPorcentaje);
 
           // Mostrar el porcentaje con solo dos decimales
-          contadorPorcentaje.innerText = `Euskal Herria: %${porcentajeGlobal.toFixed(2)}`;
+          contadorPorcentaje.innerText = `Euskal Herria: % ${porcentajeGlobal.toFixed(2)}`;
         }
 
 
