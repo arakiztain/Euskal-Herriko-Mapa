@@ -7,6 +7,25 @@ body {
   height: 100vh;
 }
 
+#search-suggestions {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  max-height: 150px;
+  overflow-y: auto;
+  width: calc(100% - 20px);
+  z-index: 1000;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
 header {
   text-align: center;
   padding: 10px;
