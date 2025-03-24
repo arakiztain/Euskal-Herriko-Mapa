@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euskal Herriko mapa</title>
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <input type="text" id="search-input" placeholder="Udalerria idatzi"></input>
+    <button id="search-btn">Bilatu</button>
+  </header>
+  <main>
+    <div id="mapa-container"></div>
+    <div id="municipios-list">
+      <div id="titulo-container">
+        <img src="assets/images/eh.png" alt="ikurriña" id="titulo-img">
+        <h2 id="titulo">Egondako herrialdetan</h2>
+      </div>
+      <div id="provincia-list"></div>
+      <div id="footer">
+        <img src="assets/images/AmnistiaIkurra.png" alt="amnistia" id="amnistia_img">
+      </div>
+    </div>
+  </main>
+  <script type=""module src="js/script.js" defer></script>
+</body>
+
+</html>

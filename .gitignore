@@ -1,0 +1,14 @@
+# Ignorar los archivos temporales y de configuración de editor
+*.log
+.vscode/
+.idea/
+
+# Ignorar archivos generados por build (si usas algún tipo de compilación o empaquetado)
+node_modules/
+
+# Ignorar archivos específicos
+script2.js
+mapa.svg
+
+# Ignorar las carpetas de imágenes de alto volumen si no necesitas subirlas (opcional)
+assets/images/
