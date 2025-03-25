@@ -1,6 +1,5 @@
 import { transformarTexto, coloresProvincias } from './utils.js';
 
-// Cargar el archivo SVG y manejar los eventos
 export function loadMap() {
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         .then(response => response.text())
@@ -41,22 +40,25 @@ export function loadMap() {
 
                 // Obtener todas las provincias a partir de los grupos <g> del mapa
                 const provinciasGrupos = document.querySelectorAll('g');
-
+                
                 provinciasGrupos.forEach(grupoProvincia => {
                     const provinciaId = grupoProvincia.id;
-
                     // Obtener todos los municipios de la provincia
                     const municipiosEnProvincia = Array.from(grupoProvincia.querySelectorAll('path'))
                         .map(path => path.id); // Obtener los IDs de los municipios dentro de la provincia
-
                     // Filtrar los municipios que están coloreados
                     const selectedMunicipios = municipiosEnProvincia.filter(id => coloresGuardados[id] === coloresProvincias[provinciaId]);
 
-                    // Eliminar duplicados: un municipio solo cuenta una vez
+                    console.log(selectedMunicipios);
+                    // Eliminar duplicados: un municipio solo cuenta una vez | Bakarrik kentze ari dauz zerrendetako bikoitzak, beste baten badau ez
                     const municipiosUnicos = [...new Set(selectedMunicipios)];
-
-                    const totalMunicipios = municipiosEnProvincia.length;
+                    //console.log(municipiosUnicos);
+                    //----------------------------------------------------------
+                    const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))].length;
+                    //console.log(totalMunicipios);
                     const selectedMunicipiosUnicos = municipiosUnicos.length;
+                    //console.log(selectedMunicipiosUnicos);
+                    //----------------------------------------------------------
 
                     totalMunicipiosGlobal += totalMunicipios;
                     totalVisitadosGlobal += selectedMunicipiosUnicos;
@@ -129,7 +131,7 @@ export function loadMap() {
             // Event listener para el botón "Bilatu"
             document.getElementById('search-btn').addEventListener('click', function () {
                 const inputNombre = document.getElementById('search-input').value.trim();
-                
+
                 if (inputNombre === '') {
                     alert("Idatzi udalerriaren izena.");
                     return;
