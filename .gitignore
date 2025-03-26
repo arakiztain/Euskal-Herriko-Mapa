@@ -8,7 +8,8 @@ node_modules/
 
 # Ignorar archivos específicos
 js/script.js
-mapa.svg
+js/script2.js
+#mapa.svg
 
 # Ignorar las carpetas de imágenes de alto volumen si no necesitas subirlas (opcional)
-assets/images/
+#assets/images/
