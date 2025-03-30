@@ -37,62 +37,93 @@ export function loadMap() {
 
                 // Crear un objeto para almacenar provincias y sus municipios
                 const provinciasAgrupadas = {};
-
+                const provinciasAgrupadasTotal = {};
+                
                 // Obtener todas las provincias a partir de los grupos <g> del mapa
                 const provinciasGrupos = document.querySelectorAll('g');
                 
                 provinciasGrupos.forEach(grupoProvincia => {
                     const provinciaId = grupoProvincia.id;
+ 
                     // Obtener todos los municipios de la provincia
                     const municipiosEnProvincia = Array.from(grupoProvincia.querySelectorAll('path'))
                         .map(path => path.id); // Obtener los IDs de los municipios dentro de la provincia
+    
                     // Filtrar los municipios que están coloreados
                     const selectedMunicipios = municipiosEnProvincia.filter(id => coloresGuardados[id] === coloresProvincias[provinciaId]);
 
-                    console.log(selectedMunicipios);
                     // Eliminar duplicados: un municipio solo cuenta una vez | Bakarrik kentze ari dauz zerrendetako bikoitzak, beste baten badau ez
                     const municipiosUnicos = [...new Set(selectedMunicipios)];
-                    //console.log(municipiosUnicos);
-                    //----------------------------------------------------------
-                    const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))].length;
-                    //console.log(totalMunicipios);
+             
+                    //const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))].length;
+                    const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))];
+
                     const selectedMunicipiosUnicos = municipiosUnicos.length;
-                    //console.log(selectedMunicipiosUnicos);
-                    //----------------------------------------------------------
-
-                    totalMunicipiosGlobal += totalMunicipios;
-                    totalVisitadosGlobal += selectedMunicipiosUnicos;
-
-                    const porcentaje = totalMunicipios > 0 ? (selectedMunicipiosUnicos / totalMunicipios) * 100 : 0;
-
+                   
+                   
                     // Si la provincia no está agrupada aún, inicializarla
                     if (!provinciasAgrupadas[provinciaId]) {
                         provinciasAgrupadas[provinciaId] = {
                             nombre: provinciaId,
-                            porcentaje: porcentaje,
-                            municipios: municipiosUnicos
+                            municipios: [...new Set(municipiosUnicos)]
                         };
+                    //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]);
+
+                    //console.log("Selected: " + selectedMunicipiosUnicos + " / " + totalMunicipios);
                     } else {
                         // Si la provincia ya está en el objeto, solo agregar los municipios nuevos
                         provinciasAgrupadas[provinciaId].municipios.push(...municipiosUnicos);
                     }
-                });
+                    //Para el total
+                    if (!provinciasAgrupadasTotal[provinciaId]) {
+                        provinciasAgrupadasTotal[provinciaId] = {
+                            nombre: provinciaId,
+                            municipios: [...new Set(totalMunicipios)]
+                        };
+                    //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]);
 
+                    //console.log("Selected: " + selectedMunicipiosUnicos + " / " + totalMunicipios);
+                    } else {
+                        // Si la provincia ya está en el objeto, solo agregar los municipios nuevos
+                        provinciasAgrupadasTotal[provinciaId].municipios.push(...totalMunicipios);
+                    }
+                });
+                
+                //console.log(Object.values(provinciasAgrupadas)[5]["municipios"].length, Object.values(provinciasAgrupadasTotal)[5]["municipios"].length);
+                //console.log([...new Set(Object.values(provinciasAgrupadas)[1]["municipios"])],[...new Set(Object.values(provinciasAgrupadasTotal)[1]["municipios"])] );
+                //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]), Object.values(provinciasAgrupadasTotal)[1]["municipios"];
+
+                //console.log((Object.values(provinciasAgrupadas)[5]["municipios"].length / Object.values(provinciasAgrupadasTotal)[5]["municipios"].length) * 100);
+                
+                //PILLA BIEN EL PORCENTAJE DIOS
+             
                 // Ordenar las provincias por nombre alfabéticamente
                 const provinciasOrdenadas = Object.keys(provinciasAgrupadas).sort((a, b) => {
                     const nombreA = provinciasAgrupadas[a].nombre.toLowerCase();
                     const nombreB = provinciasAgrupadas[b].nombre.toLowerCase();
                     return nombreA.localeCompare(nombreB);
                 });
+                
+                let selectedGlobal = 0;
+                let TotalGlobal = 0;
 
                 // Crear los elementos de provincia basados en el objeto agrupado
                 provinciasOrdenadas.forEach(provinciaId => {
                     const provincia = provinciasAgrupadas[provinciaId];
+                    //console.log(provinciaId);
+                    //console.log(Object.values(provinciasAgrupadas)[provinciaId]["municipios"].length);
+                    //[...new Set(selectedMunicipios)];
+                    const por = ([... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length / [... new Set(Object.values(provinciasAgrupadasTotal).find(objeto => objeto.nombre === provinciaId)["municipios"])].length) * 100;
+                    selectedGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
+                    TotalGlobal +=  [... new Set(Object.values(provinciasAgrupadasTotal).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
+        
+
+
 
                     // Crear el contenedor para la provincia
                     const provinciaDiv = document.createElement('div');
                     provinciaDiv.className = 'provincia';
-                    provinciaDiv.innerHTML = `${provincia.nombre} (%${provincia.porcentaje.toFixed(2)})`;
+                    provinciaDiv.innerHTML = `${provincia.nombre} (%${por.toFixed(2)})`;
 
                     // Crear la lista de municipios para esa provincia
                     const ul = document.createElement('ul');
@@ -108,12 +139,12 @@ export function loadMap() {
                     provinciaDiv.appendChild(ul);
                     provinciaListElement.appendChild(provinciaDiv);
                 });
-
                 // Calcular el porcentaje global de municipios visitados
-                const porcentajeGlobal = totalMunicipiosGlobal > 0 ? (totalVisitadosGlobal / totalMunicipiosGlobal) * 100 : 0;
+                const TotalGlobalbal = (selectedGlobal / TotalGlobal) * 100;
+                
 
                 // Actualizar el título con el porcentaje global
-                tituloElement.textContent = `Egondako herrialdetan (%${porcentajeGlobal.toFixed(2)})`;
+                tituloElement.textContent = `Egondako herrialdetan (%${TotalGlobalbal.toFixed(2)})`;
 
                 // Mostrar el porcentaje global en la interfaz de usuario
                 let contadorPorcentaje = document.createElement("div");
@@ -121,7 +152,7 @@ export function loadMap() {
                 document.getElementById("mapa-container").appendChild(contadorPorcentaje);
 
                 // Mostrar el porcentaje global con solo dos decimales
-                contadorPorcentaje.innerText = `Euskal Herria: %${porcentajeGlobal.toFixed(2)}`;
+                contadorPorcentaje.innerText = `Euskal Herria: %${TotalGlobalbal.toFixed(2)}`;
             }
 
             // Aplicar colores guardados inicialmente

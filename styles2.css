@@ -1,0 +1,173 @@
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el contenedor principal ocupe toda la altura de la pantalla */
+}
+
+/* Navbar Styles */
+nav {
+    background-color: #333;
+    padding: 15px 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-container .logo {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style-type: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #f5a623;
+}
+
+/* Hero Section Styles (Header) */
+.hero {
+    position: relative;
+    color: #fff;
+    text-align: center;
+    padding: 0;
+    margin-bottom: 0;
+    height: 100vh;  /* Asegura que la imagen ocupe toda la pantalla del navegador */
+}
+
+.hero::before {
+    background-image: url('euskal herria.webp'); /* Ruta correcta de la imagen */
+    background-size: cover;
+    background-position: center;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(5px); /* Aplica el filtro de difuminado */
+    z-index: -1; /* Coloca el difuminado detrás del contenido */
+    background-color: rgba(0, 0, 0, 0.3); /* Añade una capa oscura para mejorar la visibilidad */
+}
+
+.hero-content {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.hero .btn-primary {
+    background-color: #f5a623;
+    padding: 15px 30px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Añadimos sombra sutil */
+}
+
+.hero .btn-primary:hover {
+    background-color: #d78a1c;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Más sombra cuando el botón se pasa el ratón */
+}
+
+/* Features Section Styles */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 50px 20px;
+    background-color: #fff;
+    position: relative;
+    margin-top: -20%;
+    flex-grow: 1;  /* Esto asegura que la sección de características se estire y ocupe el espacio restante */
+}
+
+.feature {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 16px;
+    color: #666;
+}
+
+.feature:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: auto; /* Asegura que el footer se quede al final */
+    flex-shrink: 0; /* Previene que el footer se reduzca */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .features {
+        grid-template-columns: 1fr; /* Una sola columna en dispositivos pequeños */
+        padding: 30px 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+    }
+}

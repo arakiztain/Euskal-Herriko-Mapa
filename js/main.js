@@ -7,6 +7,7 @@ function initialize() {
     loadMap();
     createMenuButton();
     checkVersion();
+    //localStorage.clear();
 }
 
 initialize();
