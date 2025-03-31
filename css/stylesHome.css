@@ -62,7 +62,7 @@ nav {
 }
 
 .hero::before {
-    background-image: url('euskal herria.webp'); /* Ruta correcta de la imagen */
+    background-image: url('../assets/images/euskal herria.webp'); /* Ruta correcta de la imagen */
     background-size: cover;
     background-position: center;
     content: '';

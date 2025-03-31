@@ -1,4 +1,5 @@
 import { transformarTexto, coloresProvincias } from './utils.js';
+import { buscarEnWikipedia } from './wiki.js';
 
 export function loadMap() {
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
@@ -12,9 +13,8 @@ export function loadMap() {
 
             // Obtener todos los municipios del mapa (elementos path), excluyendo los que tienen "path" en su id
             document.querySelectorAll('path').forEach(path => {
-                // Solo agregar los ids que no contengan la palabra "path"
                 if (path.id && !path.id.includes('path')) {
-                    municipiosDisponibles.add(path.id);  // Cada municipio tiene un id
+                    municipiosDisponibles.add(path.id);
                 }
             });
 
@@ -30,7 +30,7 @@ export function loadMap() {
             function actualizarLista() {
                 const provinciaListElement = document.getElementById('provincia-list');
                 const tituloElement = document.getElementById('titulo');
-                provinciaListElement.innerHTML = '';  // Limpiar la lista antes de agregar los nuevos datos
+                provinciaListElement.innerHTML = '';
 
                 let totalMunicipiosGlobal = 0;
                 let totalVisitadosGlobal = 0;
@@ -38,110 +38,98 @@ export function loadMap() {
                 // Crear un objeto para almacenar provincias y sus municipios
                 const provinciasAgrupadas = {};
                 const provinciasAgrupadasTotal = {};
-                
+
                 // Obtener todas las provincias a partir de los grupos <g> del mapa
                 const provinciasGrupos = document.querySelectorAll('g');
-                
+
                 provinciasGrupos.forEach(grupoProvincia => {
                     const provinciaId = grupoProvincia.id;
- 
+
                     // Obtener todos los municipios de la provincia
                     const municipiosEnProvincia = Array.from(grupoProvincia.querySelectorAll('path'))
-                        .map(path => path.id); // Obtener los IDs de los municipios dentro de la provincia
-    
+                        .map(path => path.id);
+
                     // Filtrar los municipios que están coloreados
                     const selectedMunicipios = municipiosEnProvincia.filter(id => coloresGuardados[id] === coloresProvincias[provinciaId]);
 
                     // Eliminar duplicados: un municipio solo cuenta una vez | Bakarrik kentze ari dauz zerrendetako bikoitzak, beste baten badau ez
                     const municipiosUnicos = [...new Set(selectedMunicipios)];
-             
+
                     //const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))].length;
                     const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))];
 
                     const selectedMunicipiosUnicos = municipiosUnicos.length;
-                   
-                   
-                    // Si la provincia no está agrupada aún, inicializarla
+
                     if (!provinciasAgrupadas[provinciaId]) {
                         provinciasAgrupadas[provinciaId] = {
                             nombre: provinciaId,
-                            municipios: [...new Set(municipiosUnicos)]
+                            municipios: [...new Set(municipiosUnicos)],
+                            municipiosTotal: [...new Set(totalMunicipios)]
                         };
-                    //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]);
-
-                    //console.log("Selected: " + selectedMunicipiosUnicos + " / " + totalMunicipios);
                     } else {
-                        // Si la provincia ya está en el objeto, solo agregar los municipios nuevos
                         provinciasAgrupadas[provinciaId].municipios.push(...municipiosUnicos);
-                    }
-                    //Para el total
-                    if (!provinciasAgrupadasTotal[provinciaId]) {
-                        provinciasAgrupadasTotal[provinciaId] = {
-                            nombre: provinciaId,
-                            municipios: [...new Set(totalMunicipios)]
-                        };
-                    //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]);
-
-                    //console.log("Selected: " + selectedMunicipiosUnicos + " / " + totalMunicipios);
-                    } else {
-                        // Si la provincia ya está en el objeto, solo agregar los municipios nuevos
-                        provinciasAgrupadasTotal[provinciaId].municipios.push(...totalMunicipios);
+                        provinciasAgrupadas[provinciaId].municipiosTotal.push(...totalMunicipios);
                     }
                 });
-                
-                //console.log(Object.values(provinciasAgrupadas)[5]["municipios"].length, Object.values(provinciasAgrupadasTotal)[5]["municipios"].length);
-                //console.log([...new Set(Object.values(provinciasAgrupadas)[1]["municipios"])],[...new Set(Object.values(provinciasAgrupadasTotal)[1]["municipios"])] );
-                //console.log(Object.values(provinciasAgrupadas)[1]["municipios"]), Object.values(provinciasAgrupadasTotal)[1]["municipios"];
 
-                //console.log((Object.values(provinciasAgrupadas)[5]["municipios"].length / Object.values(provinciasAgrupadasTotal)[5]["municipios"].length) * 100);
-                
-                //PILLA BIEN EL PORCENTAJE DIOS
-             
                 // Ordenar las provincias por nombre alfabéticamente
                 const provinciasOrdenadas = Object.keys(provinciasAgrupadas).sort((a, b) => {
                     const nombreA = provinciasAgrupadas[a].nombre.toLowerCase();
                     const nombreB = provinciasAgrupadas[b].nombre.toLowerCase();
                     return nombreA.localeCompare(nombreB);
                 });
-                
+
                 let selectedGlobal = 0;
                 let TotalGlobal = 0;
 
                 // Crear los elementos de provincia basados en el objeto agrupado
                 provinciasOrdenadas.forEach(provinciaId => {
                     const provincia = provinciasAgrupadas[provinciaId];
-                    //console.log(provinciaId);
-                    //console.log(Object.values(provinciasAgrupadas)[provinciaId]["municipios"].length);
-                    //[...new Set(selectedMunicipios)];
-                    const por = ([... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length / [... new Set(Object.values(provinciasAgrupadasTotal).find(objeto => objeto.nombre === provinciaId)["municipios"])].length) * 100;
+                    const por = ([... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length / [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length) * 100;
                     selectedGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
-                    TotalGlobal +=  [... new Set(Object.values(provinciasAgrupadasTotal).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
-        
+                    TotalGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length;
 
-
-
-                    // Crear el contenedor para la provincia
+                    //Provincias    
                     const provinciaDiv = document.createElement('div');
                     provinciaDiv.className = 'provincia';
                     provinciaDiv.innerHTML = `${provincia.nombre} (%${por.toFixed(2)})`;
-
-                    // Crear la lista de municipios para esa provincia
+                    provincia.municipios = [...new Set(provincia.municipios)];
                     const ul = document.createElement('ul');
 
-                    // Asegurarse de que los municipios estén ordenados alfabéticamente
+                    //Udalerriak
                     provincia.municipios.sort().forEach(id => {
                         const li = document.createElement('li');
                         li.className = 'municipio';
-                        li.textContent = id;
+
+                        const span = document.createElement('span');
+                        span.textContent = id;
+
+                        const infoImage = document.createElement('img');
+                        infoImage.className = "infoImage";
+                        infoImage.src = 'info.png'; 
+                        infoImage.alt = 'Más información';
+                        infoImage.style.cursor = 'pointer'; 
+                        infoImage.style.marginLeft = '10px'; 
+
+                        const a = document.createElement('a');
+                        a.href = `https://eu.wikipedia.org/wiki/${id}`;
+                        a.target = '_blank'; 
+                        a.appendChild(infoImage); 
+                 
+                        li.appendChild(span);
+                        li.appendChild(a); 
+
                         ul.appendChild(li);
                     });
+
 
                     provinciaDiv.appendChild(ul);
                     provinciaListElement.appendChild(provinciaDiv);
                 });
+
                 // Calcular el porcentaje global de municipios visitados
                 const TotalGlobalbal = (selectedGlobal / TotalGlobal) * 100;
-                
+
 
                 // Actualizar el título con el porcentaje global
                 tituloElement.textContent = `Egondako herrialdetan (%${TotalGlobalbal.toFixed(2)})`;
@@ -203,7 +191,7 @@ export function loadMap() {
                         actualizarLista();
                     }
                 } else {
-                    alert("Ez da aurkitu udalerr mapan.");
+                    alert("Ez da aurkitu udalerri mapan.");
                 }
             });
 

@@ -2,5 +2,28 @@
   "dependencies": {
     "express": "^4.21.2",
     "node-fetch": "^3.3.2"
+  },
+  "name": "euskal-herriko-mapa",
+  "description": "![Mapa SVG](https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Euskal_Herria_municipalities.svg/1000px-Euskal_Herria_municipalities.svg.png)",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemom src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arakiztain/Euskal-Herriko-Mapa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arakiztain/Euskal-Herriko-Mapa/issues"
+  },
+  "homepage": "https://github.com/arakiztain/Euskal-Herriko-Mapa#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
