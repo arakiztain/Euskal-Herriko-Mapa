@@ -140,12 +140,14 @@ svg {
   gap: 10px;
 }
 pre {
-  background-color: #f4f4f4; /* Fondo gris claro */
-  padding: 10px; /* Espaciado interno */
-  border-radius: 5px; /* Bordes redondeados */
+  background-color: #f4f4f4; 
+  padding: 5px;
+  border-radius: 5px;
   font-family: 'Courier New', monospace; /* Fuente de tipo monoespaciado */
   font-size: 16px; /* Tamaño de la fuente */
   color: #333; /* Color del texto */
+  text-align: center;
+  justify-content: center;
   overflow-x: auto; /* Desplazamiento horizontal si el contenido es muy largo */
 }
 .infoImage{

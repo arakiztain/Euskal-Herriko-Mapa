@@ -1,5 +1,4 @@
 import { transformarTexto, coloresProvincias } from './utils.js';
-import { buscarEnWikipedia } from './wiki.js';
 
 export function loadMap() {
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
@@ -26,36 +25,31 @@ export function loadMap() {
                 });
             }
 
-            // Función para actualizar la lista de provincias y municipios
+            //Udalerriek eta margoek eguneratu
             function actualizarLista() {
                 const provinciaListElement = document.getElementById('provincia-list');
                 const tituloElement = document.getElementById('titulo');
                 provinciaListElement.innerHTML = '';
 
-                let totalMunicipiosGlobal = 0;
-                let totalVisitadosGlobal = 0;
-
-                // Crear un objeto para almacenar provincias y sus municipios
+                //Bateratute
                 const provinciasAgrupadas = {};
-                const provinciasAgrupadasTotal = {};
 
-                // Obtener todas las provincias a partir de los grupos <g> del mapa
+                //Lurralde guztiek hartu svg-ko g-gaz
                 const provinciasGrupos = document.querySelectorAll('g');
 
                 provinciasGrupos.forEach(grupoProvincia => {
                     const provinciaId = grupoProvincia.id;
 
-                    // Obtener todos los municipios de la provincia
+                    //Lurraldeko udalerri guztiek
                     const municipiosEnProvincia = Array.from(grupoProvincia.querySelectorAll('path'))
                         .map(path => path.id);
 
-                    // Filtrar los municipios que están coloreados
+                    //Margoztute dauzenak
                     const selectedMunicipios = municipiosEnProvincia.filter(id => coloresGuardados[id] === coloresProvincias[provinciaId]);
 
-                    // Eliminar duplicados: un municipio solo cuenta una vez | Bakarrik kentze ari dauz zerrendetako bikoitzak, beste baten badau ez
+                    //Bikoitzak kendu (Set)
                     const municipiosUnicos = [...new Set(selectedMunicipios)];
 
-                    //const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))].length;
                     const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))];
 
                     const selectedMunicipiosUnicos = municipiosUnicos.length;
@@ -72,7 +66,7 @@ export function loadMap() {
                     }
                 });
 
-                // Ordenar las provincias por nombre alfabéticamente
+                //Lurraldeak antoleu
                 const provinciasOrdenadas = Object.keys(provinciasAgrupadas).sort((a, b) => {
                     const nombreA = provinciasAgrupadas[a].nombre.toLowerCase();
                     const nombreB = provinciasAgrupadas[b].nombre.toLowerCase();
@@ -82,14 +76,14 @@ export function loadMap() {
                 let selectedGlobal = 0;
                 let TotalGlobal = 0;
 
-                // Crear los elementos de provincia basados en el objeto agrupado
+                //Lurraldeak eta udalerriak zerrendan ipiñi
                 provinciasOrdenadas.forEach(provinciaId => {
                     const provincia = provinciasAgrupadas[provinciaId];
                     const por = ([... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length / [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length) * 100;
                     selectedGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
                     TotalGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length;
 
-                    //Provincias    
+                    //Lurraldeak    
                     const provinciaDiv = document.createElement('div');
                     provinciaDiv.className = 'provincia';
                     provinciaDiv.innerHTML = `${provincia.nombre} (%${por.toFixed(2)})`;
@@ -104,13 +98,13 @@ export function loadMap() {
                         const span = document.createElement('span');
                         span.textContent = id;
 
+                        //Info Wikipedia button
                         const infoImage = document.createElement('img');
                         infoImage.className = "infoImage";
-                        infoImage.src = 'info.png'; 
+                        infoImage.src = '../assets/Images/info.png'; 
                         infoImage.alt = 'Más información';
                         infoImage.style.cursor = 'pointer'; 
                         infoImage.style.marginLeft = '10px'; 
-
                         const a = document.createElement('a');
                         a.href = `https://eu.wikipedia.org/wiki/${id}`;
                         a.target = '_blank'; 
@@ -127,27 +121,20 @@ export function loadMap() {
                     provinciaListElement.appendChild(provinciaDiv);
                 });
 
-                // Calcular el porcentaje global de municipios visitados
+                //%
                 const TotalGlobalbal = (selectedGlobal / TotalGlobal) * 100;
-
-
-                // Actualizar el título con el porcentaje global
                 tituloElement.textContent = `Egondako herrialdetan (%${TotalGlobalbal.toFixed(2)})`;
-
-                // Mostrar el porcentaje global en la interfaz de usuario
                 let contadorPorcentaje = document.createElement("div");
                 contadorPorcentaje.id = "contador-porcentaje";
                 document.getElementById("mapa-container").appendChild(contadorPorcentaje);
-
-                // Mostrar el porcentaje global con solo dos decimales
                 contadorPorcentaje.innerText = `Euskal Herria: %${TotalGlobalbal.toFixed(2)}`;
             }
 
-            // Aplicar colores guardados inicialmente
+
             aplicarColoresGuardados();
             actualizarLista();
 
-            // Event listener para el botón "Bilatu"
+            //Button
             document.getElementById('search-btn').addEventListener('click', function () {
                 const inputNombre = document.getElementById('search-input').value.trim();
 

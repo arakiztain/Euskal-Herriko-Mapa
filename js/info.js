@@ -9,7 +9,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         const coloresGuardados = JSON.parse(localStorage.getItem('coloresMunicipios')) || {};
         const municipiosDisponibles = new Set();
 
-        // Crear un tooltip para mostrar el id del municipio
+        //Tooltip (Udalerri, Lurralde)
         const tooltip = document.createElement('div');
         tooltip.id = 'tooltip';
         tooltip.style.position = 'absolute';
@@ -24,30 +24,44 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         document.querySelectorAll('path').forEach(path => {
             if (path.id && !path.id.includes('path')) {
                 municipiosDisponibles.add(path.id);
+
+                //path multiples
+                let relatedPaths = [];
                 
-                // Evento mouseover para mostrar el ID del municipio
+                //mouseover event
                 path.addEventListener('mouseover', function(event) {
                     const municipioId = event.target.id;
                     const provinciaId = event.target.parentElement.id
-                    // Mostrar el tooltip con el ID del municipio
-                    // tooltip.textContent= `Udalerria: ${municipioId} \n Probintzia: ${provinciaId}`;
                     tooltip.innerHTML = `<pre> Udalerria: ${municipioId} \n Probintzia: ${provinciaId}<pre/>`;
                     tooltip.style.display = 'block';
 
-                    // Posicionar el tooltip cerca del path
+                    //X,Y
                     const pathRect = event.target.getBoundingClientRect();
                     tooltip.style.left = `${pathRect.left + window.scrollX + pathRect.width / 2 - tooltip.offsetWidth / 2}px`;
                     tooltip.style.top = `${pathRect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+
+                    //path bat baño gehiau badauz, bategaz egonda danak margozten diez
+                    relatedPaths = document.querySelectorAll(`path[id*="${municipioId.split('_')[0]}"]`);
+
+                    relatedPaths.forEach((realeatedPath) => {
+                        realeatedPath.style.fill = "white";
+                        realeatedPath.style.transition = 'all 0.5s ease';
+                    });
                 });
 
-                // Evento mouseout para ocultar el tooltip
+                //Kentzeko
                 path.addEventListener('mouseout', function() {
                     tooltip.style.display = 'none';
+                    
+                    relatedPaths.forEach((realeatedPath) => {
+                        realeatedPath.style.fill = '#ffeabf';
+                    });
+                    
                 });
             }
         });
 
-        // Event listener para el botón "Bilatu"
+        //Bilatu button
         document.getElementById('search-btn').addEventListener('click', function () {
             const inputNombre = document.getElementById('search-input').value.trim();
 
