@@ -1,12 +1,11 @@
 import { buscarEnWikipedia } from "./wiki.js";
+import {transformarTexto } from "./utils.js";
 
 fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
     .then(response => response.text())
     .then(svg => {
         document.getElementById('mapa-container').innerHTML = svg;
 
-        const svgElement = document.querySelector('svg');
-        const coloresGuardados = JSON.parse(localStorage.getItem('coloresMunicipios')) || {};
         const municipiosDisponibles = new Set();
 
         //Tooltip (Udalerri, Lurralde)
@@ -43,7 +42,6 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     //path bat baño gehiau badauz, bategaz egonda danak margozten diez
                     relatedPaths = document.querySelectorAll(`path[id="${municipioId.split('_')[0]}"]`);
 
-                    console.log(document.querySelectorAll);
                     relatedPaths.forEach((realeatedPath) => {
                         realeatedPath.style.fill = "white";
                         realeatedPath.style.transition = 'all 0.5s ease';
@@ -60,55 +58,10 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     
                 });
             }
+      
         });
 
-        //Bilatu button
-        document.getElementById('search-btn').addEventListener('click', function () {
-            const inputNombre = document.getElementById('search-input').value.trim();
-
-            if (inputNombre === '') {
-                alert("Idatzi udalerriaren izena.");
-                return;
-            }
-
-            const nombreNormalizado = transformarTexto(inputNombre);
-            const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
-
-            if (municipiosConMismoId.length > 0) {
-                let provinciaColor = null;
-
-                // Obtener el grupo de la provincia del primer municipio
-                const grupoProvincia = municipiosConMismoId[0].closest('g');
-                const provinciaId = grupoProvincia ? grupoProvincia.id : null;
-
-                if (provinciaId) {
-                    // Obtener el color de la provincia asociada al grupo
-                    provinciaColor = coloresProvincias[provinciaId];
-
-                    // Comprobar si el municipio ya está coloreado
-                    if (coloresGuardados[nombreNormalizado]) {
-                        alert(`${nombreNormalizado} jadanik margotute dau.`);
-                        return;
-                    }
-
-                    // Colorear todos los paths con el mismo ID
-                    municipiosConMismoId.forEach(municipio => {
-                        municipio.style.fill = provinciaColor;
-                    });
-
-                    // Guardar el color de todos los municipios con ese id
-                    municipiosConMismoId.forEach(municipio => {
-                        coloresGuardados[municipio.id] = provinciaColor;
-                    });
-
-                    // Guardar los colores y actualizar la lista
-                    localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
-                    actualizarLista();
-                }
-            } else {
-                alert("Ez da aurkitu udalerri mapan.");
-            }
-        });
+  
 
         // Función de autocompletado
         const searchSuggestions = document.getElementById('search-suggestions');

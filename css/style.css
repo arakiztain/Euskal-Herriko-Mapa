@@ -139,6 +139,17 @@ svg {
   align-items: center;
   gap: 10px;
 }
+
+/* Estilo para el contenedor de resultados */
+#resultados {
+  width: 300px; /* Establece un ancho fijo */
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  padding: 10px;
+  height: 600px; /* Ajusta según el tamaño que necesites */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido es largo */
+}
+
 pre {
   background-color: #f4f4f4; 
   padding: 5px;

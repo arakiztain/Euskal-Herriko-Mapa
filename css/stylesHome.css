@@ -158,6 +158,9 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .hero::before {
+        background-image: url('../assets/images/euskal herria.webp');
+    }
     .features {
         grid-template-columns: 1fr; /* Una sola columna en dispositivos pequeños */
         padding: 30px 20px;

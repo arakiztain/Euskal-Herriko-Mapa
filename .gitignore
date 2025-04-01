@@ -2,6 +2,7 @@
 *.log
 .vscode/
 .idea/
+.env
 
 # Ignorar archivos generados por build (si usas algún tipo de compilación o empaquetado)
 node_modules/

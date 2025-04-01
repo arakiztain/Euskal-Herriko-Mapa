@@ -101,7 +101,7 @@ export function loadMap() {
                         //Info Wikipedia button
                         const infoImage = document.createElement('img');
                         infoImage.className = "infoImage";
-                        infoImage.src = '../assets/Images/info.png'; 
+                        infoImage.src = '../assets/images/info.png'; 
                         infoImage.alt = 'Más información';
                         infoImage.style.cursor = 'pointer'; 
                         infoImage.style.marginLeft = '10px'; 

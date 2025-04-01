@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Euskal Herriko mapa</title>
-  <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
-  <link rel="stylesheet" href="css/style.css">
+  <title>Bienvenido al Mapa Interactivo</title>
+  <link rel="stylesheet" href="css/stylesHome.css">
 </head>
-
 <body>
+  <div class="page-wrapper">
 
-  <header>
-    <input type="text" id="search-input" placeholder="Udalerria idatzi"></input>
-    <div id="search-suggestions"></div>
-    <button id="search-btn">Bilatu</button>
-  </header>
-
-  <main>
-    <div id="mapa-container"></div>
-    <div id="municipios-list">
-      <div id="titulo-container">
-        <img src="assets/images/eh.png" alt="ikurriña" id="titulo-img">
-        <h2 id="titulo">Egondako herrialdetan</h2>
+    <nav>
+      <div class="nav-container">
+        <a href="#" class="logo">Euskal Herriko Mapa</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Hasiera</a></li>
+          <li><a href="mapa.html">Mapa</a></li>
+          <li><a href="info.html">Argibidea</a></li>
+        </ul>
       </div>
-      <div id="provincia-list"></div>
-      <div id="footer">
-        <img src="assets/images/AmnistiaIkurra.png" alt="amnistia" id="amnistia_img">
-      </div>
-    </div>
-  </main>
+    </nav>
 
-  <script type="module" src="js/main.js" defer></script>
+    <main>
+    
+      <header class="hero">
+        <div class="hero-content">
+          <h1>Ongi Etorri Euskal Herriko Mapa Interaktibora</h1>
+          <p>Aztertu udalerriak eta eskuratu bakoitzaren informazio zehatza klik egitean.</p>
+          <a href="mapa.html" class="btn-primary">Mapa ikusi</a>
+        </div>
+      </header>
+
+      <div class="background-overlay"></div>
+
+      <section class="features">
+        <div class="feature">
+          <h2>Interactividad</h2>
+          <p>Egin klik edozein udalerritan informazio zehatza berehala lortzeko.</p>
+        </div>
+        <div class="feature">
+          <h2>Euskal Herria ezagutu</h2>
+          <p>Geure herriaren udalerri eta herriei buruz gehiau ezagutu</p>
+        </div>
+        <div class="feature">
+          <h2>Erabiltzeko erraza</h2>
+          <p>Edozein erabiltzailerentzat intuitiboa eta nabigatzeko erraza izan dadin diseinatua.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 EH-ko mapa. Eskubide guztiak erreserbatuta.</p>
+    </footer>
+  </div>
 </body>
-
 </html>
