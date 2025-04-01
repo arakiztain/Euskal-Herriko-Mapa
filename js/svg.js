@@ -1,6 +1,6 @@
 import { transformarTexto, coloresProvincias } from './utils.js';
 
-export function loadMap() {
+export async function loadMap() {
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         .then(response => response.text())
         .then(svg => {

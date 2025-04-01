@@ -35,3 +35,39 @@ export function transformarTexto(texto) {
         })
         .join('');
 }
+
+export function sugerirMunicipios(query, municipiosDisponibles, searchSuggestions) {
+    searchSuggestions.innerHTML = '';
+
+    if (query === '') return;
+
+    const sugerencias = Array.from(municipiosDisponibles).filter(municipioId =>
+        municipioId.toLowerCase().startsWith(query.toLowerCase()) 
+    );
+
+    sugerencias.forEach(municipio => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.className = 'suggestion-item';
+        suggestionItem.textContent = municipio;
+
+        suggestionItem.addEventListener('click', function () {
+            searchInput.value = municipio;
+            searchSuggestions.innerHTML = ''; 
+
+            const path = document.querySelector(`path[id="${municipio}"]`);
+            if (path) {
+                path.click(); 
+            }
+        });
+
+        searchSuggestions.appendChild(suggestionItem);
+    });
+}
+
+const searchSuggestions = document.getElementById('search-suggestions');
+const searchInput = document.getElementById('search-input');
+
+searchInput.addEventListener('input', function () {
+    const query = searchInput.value.trim(); 
+    sugerirMunicipios(query, municipiosDisponibles, searchSuggestions);  
+});

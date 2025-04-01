@@ -1,14 +1,18 @@
 import { buscarEnWikipedia } from "./wiki.js";
-import {transformarTexto } from "./utils.js";
+import { transformarTexto, coloresProvincias, sugerirMunicipios } from "./utils.js";
 
 fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
     .then(response => response.text())
     .then(svg => {
         document.getElementById('mapa-container').innerHTML = svg;
 
+        let previousHighlightedPaths = [];
+        let provinciaList = [];
         const municipiosDisponibles = new Set();
+        const provincias = new Set();
+        const provinciaColoreada = new Set();
 
-        //Tooltip (Udalerri, Lurralde)
+        // Tooltip (Udalerria, Lurralde)
         const tooltip = document.createElement('div');
         tooltip.id = 'tooltip';
         tooltip.style.position = 'absolute';
@@ -24,135 +28,190 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
             if (path.id && !path.id.includes('path')) {
                 municipiosDisponibles.add(path.id);
 
-                //path multiples
-                let relatedPaths = [];
-                
-                //mouseover event
-                path.addEventListener('mouseover', function(event) {
+                // Obtener la provincia (grupo 'g') a la que pertenece el municipio
+                const provinciaId = path.closest('g') ? path.closest('g').id : null;
+                if (provinciaId) {
+                    provincias.add(provinciaId);
+                }
+
+                // Evento mouseover
+                path.addEventListener('mouseover', function (event) {
                     const municipioId = event.target.id;
-                    const provinciaId = event.target.parentElement.id
+                    const provinciaId = event.target.closest('g') ? event.target.closest('g').id : null;
                     tooltip.innerHTML = `<pre> Udalerria: ${municipioId} \n Probintzia: ${provinciaId}<pre/>`;
                     tooltip.style.display = 'block';
 
-                    //X,Y
+                    // Posicionar el tooltip
                     const pathRect = event.target.getBoundingClientRect();
                     tooltip.style.left = `${pathRect.left + window.scrollX + pathRect.width / 2 - tooltip.offsetWidth / 2}px`;
                     tooltip.style.top = `${pathRect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
 
-                    //path bat baño gehiau badauz, bategaz egonda danak margozten diez
-                    relatedPaths = document.querySelectorAll(`path[id="${municipioId.split('_')[0]}"]`);
+                    const relatedPaths = document.querySelectorAll(`path[id="${municipioId.split('_')[0]}"]`);
 
-                    relatedPaths.forEach((realeatedPath) => {
-                        realeatedPath.style.fill = "white";
-                        realeatedPath.style.transition = 'all 0.5s ease';
+                    relatedPaths.forEach((relatedPath) => {
+                        const group = relatedPath.closest('g');
+                        if (previousHighlightedPaths.length > 0) {
+                            document.querySelectorAll(`path[id^="${previousHighlightedPaths[0].id.split('_')[0]}"]`).forEach((path) => {
+                                path.style.fill = '#ffeabf';
+                                previousHighlightedPaths.pop(path);
+
+                            })
+                        }
+                        if (group && !provinciaList.includes(group.id)) {
+                            buscarEnWikipedia(municipioId);
+                            relatedPath.style.fill = 'white';
+                            relatedPath.style.transition = 'all 0.5s ease';
+                        }
+
                     });
                 });
 
-                //Kentzeko
-                path.addEventListener('mouseout', function() {
+                // Evento mouseout
+                path.addEventListener('mouseout', function (event) {
                     tooltip.style.display = 'none';
-                    
-                    relatedPaths.forEach((realeatedPath) => {
-                        realeatedPath.style.fill = '#ffeabf';
-                    });
-                    
+
+                    if (!provinciaColoreada.has(path.closest('g').id)) {
+                        const relatedPaths = document.querySelectorAll(`path[id^="${path.id.split('_')[0]}"]`);
+                        relatedPaths.forEach((relatedPath) => {
+                            if (provinciaList.length > 0) {
+                                buscarEnWikipedia(provinciaList[0]);
+                            }
+                            document.getElementById('resultados').innerHTML = "";
+                            relatedPath.style.fill = '#ffeabf';
+                            previousHighlightedPaths.pop(relatedPath);
+                        });
+                    }
                 });
             }
-      
         });
 
-  
+        //Checkbox
+        const Resultcheckbox = document.getElementById('checkbox');
+        provincias.forEach(provincia => {
+            const provinciaDiv = document.createElement('div');
+            provinciaDiv.className = 'provincia-item';
+            provinciaDiv.innerHTML = `
+        <input type="checkbox" id="provincia-${provincia}" class="provincia-checkbox" />
+        <label for="provincia-${provincia}">${provincia}</label>`;
 
-        // Función de autocompletado
+            provinciaDiv.addEventListener('click', function (event) {
+                event.stopPropagation();
+
+                // All g
+                const grupoProvincia = document.querySelectorAll(`g[id="${provincia}"]`);
+
+                if (grupoProvincia) {
+                    buscarEnWikipedia(grupoProvincia[0].id);
+                    provinciaList.push(grupoProvincia[0].id);
+                    grupoProvincia.forEach(grupo => {
+                        const paths = grupo.querySelectorAll('path');
+                        const color = coloresProvincias[grupoProvincia[0].id];
+                        console.log(grupoProvincia[0].id);
+                        paths.forEach(path => {
+                            if (!path.id.includes('path')) {
+                                path.style.fill = color;
+                            }
+
+                        });
+                    });
+
+                    // Añadir o quitar la provincia de la lista de provincias coloreadas
+                    if (provinciaColoreada.has(provincia)) {
+                        provinciaColoreada.delete(provincia);
+                    } else {
+                        provinciaColoreada.add(provincia);
+                    }
+                }
+            });
+
+            Resultcheckbox.appendChild(provinciaDiv);
+        });
+
+        const checkboxes = document.querySelectorAll('.provincia-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+
+                    // Si el checkbox es desmarcado, restauramos todos los municipios a su color por defecto
+                    document.querySelectorAll('path').forEach(path => {
+                        if (!path.id.includes('path')) {
+                            path.style.fill = '#ffeabf';
+                            if (provinciaList.length > 0) {
+                                provinciaList.pop(path.closest('g'));
+                            }
+
+                        }
+
+                    });
+                    //Eztoa!
+                    document.getElementById('resultados').innerHTML = "";
+                }
+
+            });
+
+        });
+
+
+        // Configurar el botón de búsqueda
+        document.getElementById('search-btn').addEventListener('click', function () {
+            const query = transformarTexto(document.getElementById('search-input').value.trim());
+
+            if (query) {
+                // Limpiar resultados anteriores
+                document.getElementById('resultados').innerHTML = "";
+
+                // Eliminar el color rojo de los municipios anteriores
+                previousHighlightedPaths.forEach(path => {
+                    path.style.fill = '#ffeabf';
+                });
+
+                // Vaciar el array de los municipios coloreados
+                previousHighlightedPaths = [];
+
+                // Seleccionar los nuevos paths correspondientes a la búsqueda
+                const newPaths = document.querySelectorAll(`path[id="${query.split('_')[0]}"]`);
+
+
+                // Colorear de rojo los nuevos paths
+                newPaths.forEach((relatedPath) => {
+                    relatedPath.style.fill = 'white';
+                    relatedPath.style.transition = 'all 0.5s ease';
+                    previousHighlightedPaths.push(relatedPath);
+                });
+
+                console.log(query);
+                buscarEnWikipedia(query);
+            } else {
+                alert('Por favor, ingrese un municipio para buscar.');
+            }
+        });
+
+
+        // Llamada a la función dentro del evento de input
         const searchSuggestions = document.getElementById('search-suggestions');
         const searchInput = document.getElementById('search-input');
 
+        // Función de autocompletado
         searchInput.addEventListener('input', function () {
-            const query = searchInput.value.trim().toLowerCase();
-
-            // Limpiar las sugerencias anteriores
-            searchSuggestions.innerHTML = '';
-
-            if (query === '') return;
-
-            // Filtrar municipios que coincidan con la búsqueda
-            const sugerencias = Array.from(municipiosDisponibles).filter(municipioId =>
-                municipioId.toLowerCase().includes(query)
-            );
-
-            // Mostrar las sugerencias
-            sugerencias.forEach(municipio => {
-                const suggestionItem = document.createElement('div');
-                suggestionItem.className = 'suggestion-item';
-                suggestionItem.textContent = municipio;
-                suggestionItem.addEventListener('click', function () {
-                    // Cuando se hace clic en una sugerencia, se selecciona y colorea
-                    searchInput.value = municipio;
-                    searchSuggestions.innerHTML = ''; // Limpiar sugerencias
-
-                    const path = document.querySelector(`path[id="${municipio}"]`);
-                    if (path) {
-                        path.click(); // Simular un clic en el municipio
-                    }
-                });
-                searchSuggestions.appendChild(suggestionItem);
-            });
+            const query = searchInput.value.trim();  // Capturamos la entrada del usuario
+            sugerirMunicipios(query, municipiosDisponibles, searchSuggestions);  // Llamamos a la función para mostrar las sugerencias
         });
 
-        // Ocultar sugerencias si se hace clic fuera
+
+        // Click fuera
         document.addEventListener('click', function (event) {
             if (!event.target.closest('#search-input') && !event.target.closest('#search-suggestions')) {
                 searchSuggestions.innerHTML = '';
             }
         });
 
-        // Manejo del evento Enter en el campo de búsqueda (input)
+        // Enter input
         searchInput.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
-                // Simular el clic en el botón de búsqueda
                 document.getElementById('search-btn').click();
             }
         });
 
-        // // Manejo del clic en el mapa
-        // svgElement.addEventListener('click', function (event) {
-        //     if (event.target.tagName === 'path') {
-        //         const municipioId = event.target.id;
-        //         let provinciaColor = null;
-
-        //         // Buscar el grupo <g> más cercano al <path> clicado
-        //         const grupoProvincia = event.target.closest('g');
-        //         const provinciaId = grupoProvincia ? grupoProvincia.id : null;
-
-        //         if (provinciaId) {
-        //             // Obtener el color de la provincia asociada al grupo
-        //             provinciaColor = coloresProvincias[provinciaId];
-
-        //             // Si el municipio ya tiene un color asignado, lo eliminamos
-        //             if (coloresGuardados[municipioId]) {
-        //                 const paths = document.querySelectorAll(`path[id="${municipioId}"]`);
-        //                 paths.forEach(path => path.style.fill = '#ffeabf'); // Color por defecto
-        //                 delete coloresGuardados[municipioId];
-        //             } else {
-        //                 // Solicitar el nombre del municipio mediante un prompt
-        //                 const inputNombre = prompt('Sartu ezazu udalerriaren izena:', municipioId);
-        //                 if (inputNombre) {
-        //                     const nombreNormalizado = transformarTexto(inputNombre);
-        //                     const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
-
-        //                     if (municipiosConMismoId.length > 0) {
-        //                         buscarEnWikipedia(municipiosConMismoId);
-        //                     } else {
-        //                         alert("Ez da aurkitu udalerria mapan.");
-        //                     }
-        //                 }
-        //             }
-
-        //             // Guardar los colores y actualizar la lista
-        //             localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
-        //             actualizarLista();
-        //         }
-        //     }
-        // });
     })
     .catch(error => console.error('Error al cargar el SVG:', error));
