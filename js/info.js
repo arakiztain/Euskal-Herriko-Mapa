@@ -41,8 +41,9 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     tooltip.style.top = `${pathRect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
 
                     //path bat baño gehiau badauz, bategaz egonda danak margozten diez
-                    relatedPaths = document.querySelectorAll(`path[id*="${municipioId.split('_')[0]}"]`);
+                    relatedPaths = document.querySelectorAll(`path[id="${municipioId.split('_')[0]}"]`);
 
+                    console.log(document.querySelectorAll);
                     relatedPaths.forEach((realeatedPath) => {
                         realeatedPath.style.fill = "white";
                         realeatedPath.style.transition = 'all 0.5s ease';
@@ -160,45 +161,45 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
             }
         });
 
-        // Manejo del clic en el mapa
-        svgElement.addEventListener('click', function (event) {
-            if (event.target.tagName === 'path') {
-                const municipioId = event.target.id;
-                let provinciaColor = null;
+        // // Manejo del clic en el mapa
+        // svgElement.addEventListener('click', function (event) {
+        //     if (event.target.tagName === 'path') {
+        //         const municipioId = event.target.id;
+        //         let provinciaColor = null;
 
-                // Buscar el grupo <g> más cercano al <path> clicado
-                const grupoProvincia = event.target.closest('g');
-                const provinciaId = grupoProvincia ? grupoProvincia.id : null;
+        //         // Buscar el grupo <g> más cercano al <path> clicado
+        //         const grupoProvincia = event.target.closest('g');
+        //         const provinciaId = grupoProvincia ? grupoProvincia.id : null;
 
-                if (provinciaId) {
-                    // Obtener el color de la provincia asociada al grupo
-                    provinciaColor = coloresProvincias[provinciaId];
+        //         if (provinciaId) {
+        //             // Obtener el color de la provincia asociada al grupo
+        //             provinciaColor = coloresProvincias[provinciaId];
 
-                    // Si el municipio ya tiene un color asignado, lo eliminamos
-                    if (coloresGuardados[municipioId]) {
-                        const paths = document.querySelectorAll(`path[id="${municipioId}"]`);
-                        paths.forEach(path => path.style.fill = '#ffeabf'); // Color por defecto
-                        delete coloresGuardados[municipioId];
-                    } else {
-                        // Solicitar el nombre del municipio mediante un prompt
-                        const inputNombre = prompt('Sartu ezazu udalerriaren izena:', municipioId);
-                        if (inputNombre) {
-                            const nombreNormalizado = transformarTexto(inputNombre);
-                            const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
+        //             // Si el municipio ya tiene un color asignado, lo eliminamos
+        //             if (coloresGuardados[municipioId]) {
+        //                 const paths = document.querySelectorAll(`path[id="${municipioId}"]`);
+        //                 paths.forEach(path => path.style.fill = '#ffeabf'); // Color por defecto
+        //                 delete coloresGuardados[municipioId];
+        //             } else {
+        //                 // Solicitar el nombre del municipio mediante un prompt
+        //                 const inputNombre = prompt('Sartu ezazu udalerriaren izena:', municipioId);
+        //                 if (inputNombre) {
+        //                     const nombreNormalizado = transformarTexto(inputNombre);
+        //                     const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
 
-                            if (municipiosConMismoId.length > 0) {
-                                buscarEnWikipedia(municipiosConMismoId);
-                            } else {
-                                alert("Ez da aurkitu udalerria mapan.");
-                            }
-                        }
-                    }
+        //                     if (municipiosConMismoId.length > 0) {
+        //                         buscarEnWikipedia(municipiosConMismoId);
+        //                     } else {
+        //                         alert("Ez da aurkitu udalerria mapan.");
+        //                     }
+        //                 }
+        //             }
 
-                    // Guardar los colores y actualizar la lista
-                    localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
-                    actualizarLista();
-                }
-            }
-        });
+        //             // Guardar los colores y actualizar la lista
+        //             localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
+        //             actualizarLista();
+        //         }
+        //     }
+        // });
     })
     .catch(error => console.error('Error al cargar el SVG:', error));
