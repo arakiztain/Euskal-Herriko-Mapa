@@ -7,7 +7,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         document.getElementById('mapa-container').innerHTML = svg;
 
         let previousHighlightedPaths = [];
-        let provinciaList = [];
+        let provinciaList = new Set();
         const municipiosDisponibles = new Set();
         const provincias = new Set();
         const provinciaColoreada = new Set();
@@ -57,7 +57,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
 
                             })
                         }
-                        if (group && !provinciaList.includes(group.id)) {
+                        if (group && !provinciaList.has(group.id)) {
                             buscarEnWikipedia(municipioId);
                             relatedPath.style.fill = 'white';
                             relatedPath.style.transition = 'all 0.5s ease';
@@ -73,8 +73,8 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     if (!provinciaColoreada.has(path.closest('g').id)) {
                         const relatedPaths = document.querySelectorAll(`path[id^="${path.id.split('_')[0]}"]`);
                         relatedPaths.forEach((relatedPath) => {
-                            if (provinciaList.length > 0) {
-                                buscarEnWikipedia(provinciaList[0]);
+                            if (provinciaList.size > 0) {
+                                buscarEnWikipedia([...provinciaList][provinciaList.size - 1]);
                             }
                             document.getElementById('resultados').innerHTML = "";
                             relatedPath.style.fill = '#ffeabf';
@@ -85,73 +85,81 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
             }
         });
 
-        //Checkbox
-        const Resultcheckbox = document.getElementById('checkbox');
-        provincias.forEach(provincia => {
-            const provinciaDiv = document.createElement('div');
-            provinciaDiv.className = 'provincia-item';
-            provinciaDiv.innerHTML = `
-        <input type="checkbox" id="provincia-${provincia}" class="provincia-checkbox" />
-        <label for="provincia-${provincia}">${provincia}</label>`;
+ // Versión corregida del código de los checkboxes
+const Resultcheckbox = document.getElementById('checkbox');
+provincias.forEach(provincia => {
+    const provinciaDiv = document.createElement('div');
+    provinciaDiv.className = 'provincia-card';
+    
+    provinciaDiv.innerHTML = `
+        <div class="card-header">${provincia}</div>
+        <div class="card-image-container">
+            <input type="checkbox" id="provincia-${provincia}" class="provincia-checkbox" />
+            <label for="provincia-${provincia}" class="card-label">
+                <img src='../assets/images/checkbox/${provincia}.png' alt="${provincia}">
+            </label>
+        </div>
+    `;
 
-            provinciaDiv.addEventListener('click', function (event) {
-                event.stopPropagation();
+    const checkbox = provinciaDiv.querySelector('.provincia-checkbox');
+    const label = provinciaDiv.querySelector('.card-label');
+    
+    // Manejar el cambio en el checkbox
+    checkbox.addEventListener('change', function() {
+        const checkboxId = this.id.replace('provincia-', '');
+        const grupoProvincia = document.querySelectorAll(`g[id="${checkboxId}"]`);
 
-                // All g
-                const grupoProvincia = document.querySelectorAll(`g[id="${provincia}"]`);
-
-                if (grupoProvincia) {
-                    buscarEnWikipedia(grupoProvincia[0].id);
-                    provinciaList.push(grupoProvincia[0].id);
-                    grupoProvincia.forEach(grupo => {
-                        const paths = grupo.querySelectorAll('path');
-                        const color = coloresProvincias[grupoProvincia[0].id];
-                        console.log(grupoProvincia[0].id);
-                        paths.forEach(path => {
-                            if (!path.id.includes('path')) {
-                                path.style.fill = color;
-                            }
-
-                        });
-                    });
-
-                    // Añadir o quitar la provincia de la lista de provincias coloreadas
-                    if (provinciaColoreada.has(provincia)) {
-                        provinciaColoreada.delete(provincia);
-                    } else {
-                        provinciaColoreada.add(provincia);
+        if (this.checked) {
+            // Cuando se selecciona
+            buscarEnWikipedia(checkboxId);
+            provinciaList.add(checkboxId);
+            
+            grupoProvincia.forEach(grupo => {
+                const paths = grupo.querySelectorAll('path');
+                const color = coloresProvincias[checkboxId];
+                paths.forEach(path => {
+                    if (!path.id.includes('path')) {
+                        path.style.fill = color;
                     }
-                }
+                });
             });
-
-            Resultcheckbox.appendChild(provinciaDiv);
-        });
-
-        const checkboxes = document.querySelectorAll('.provincia-checkbox');
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                if (!checkbox.checked) {
-
-                    // Si el checkbox es desmarcado, restauramos todos los municipios a su color por defecto
-                    document.querySelectorAll('path').forEach(path => {
-                        if (!path.id.includes('path')) {
-                            path.style.fill = '#ffeabf';
-                            if (provinciaList.length > 0) {
-                                provinciaList.pop(path.closest('g'));
-                            }
-
-                        }
-
-                    });
-                    //Eztoa!
-                    document.getElementById('resultados').innerHTML = "";
-                }
-
+            provinciaColoreada.add(checkboxId);
+            provinciaDiv.classList.add('selected');
+        } else {
+            // Cuando se deselecciona
+            grupoProvincia.forEach(grupo => {
+                grupo.querySelectorAll('path').forEach(path => {
+                    if (!path.id.includes('path')) {
+                        path.style.fill = '#ffeabf';
+                    }
+                });
             });
+            
+            provinciaList.delete(checkboxId);
+            provinciaColoreada.delete(checkboxId);
+            provinciaDiv.classList.remove('selected');
+            
+            if (provinciaList.size > 0) {
+                buscarEnWikipedia([...provinciaList].pop());
+            } else {
+                document.getElementById('resultados').innerHTML = "";
+                buscarEnWikipedia("Not");
+            }
+        }
+    });
 
-        });
+    // Manejar clic en toda la carta
+    provinciaDiv.addEventListener('click', function(event) {
+        // Si el clic no fue directamente en el checkbox o el label
+        if (event.target !== checkbox && event.target !== label && !label.contains(event.target)) {
+            checkbox.checked = !checkbox.checked;
+            const changeEvent = new Event('change');
+            checkbox.dispatchEvent(changeEvent);
+        }
+    });
 
+    Resultcheckbox.appendChild(provinciaDiv);
+});
 
         // Configurar el botón de búsqueda
         document.getElementById('search-btn').addEventListener('click', function () {
@@ -180,7 +188,6 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     previousHighlightedPaths.push(relatedPath);
                 });
 
-                console.log(query);
                 buscarEnWikipedia(query);
             } else {
                 alert('Por favor, ingrese un municipio para buscar.');

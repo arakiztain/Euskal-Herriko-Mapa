@@ -5,19 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Euskal Herriko mapa</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/styleInfo.css">
 </head>
 <body>
   <header>
-    <input type="text" id="search-input" placeholder="Udalerria idatzi">
-    <div id="search-suggestions"></div>
-    <button id="search-btn">Bilatu</button>
+    <nav>
+      <div class="nav-container">
+        <a href="#" class="logo">Euskal Herriko Mapa</a>
+        
+        <div class="search-container">
+          <input type="text" id="search-input" placeholder="Udalerria idatzi">
+          <button id="search-btn">Bilatu</button>
+          <div id="search-suggestions"></div>
+        </div>
+        
+        <ul class="nav-links">
+          <li><a href="index.html">Hasiera</a></li>
+          <li><a href="mapa.html">Mapa</a></li>
+          <li><a href="info.html">Argibidea</a></li>
+        </ul>
+      </div>
+    </nav>
   </header>
 
   <main>
     <div id="mapa-container"></div>
-    <div id="resultados"></div>
-    <div id="checkbox"></div>
+    <div class="side-content">
+      <div id="resultados"></div>
+      <div id="checkbox"></div>
+    </div>
   </main>
 
   <script type="module" src="./js/info.js" defer></script>
