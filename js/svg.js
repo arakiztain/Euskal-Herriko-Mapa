@@ -145,31 +145,26 @@ export async function loadMap() {
                 if (matchingMunicipalities.length > 0) {
                     let provinceColor = null;
 
-                    // Obtener el grupo de la provincia del primer municipio
+                    //get first g
                     const provinceGroup = matchingMunicipalities[0].closest('g');
                     const provinceId = provinceGroup ? provinceGroup.id : null;
 
                     if (provinceId) {
-                        // Obtener el color de la provincia asociada al grupo
                         provinceColor = provinceColors[provinceId];
 
-                        // Comprobar si el municipio ya está coloreado
                         if (savedColors[normalizedName]) {
                             alert(`${normalizedName} jadanik margotute dau.`);
                             return;
                         }
 
-                        // Colorear todos los paths con el mismo ID
                         matchingMunicipalities.forEach(municipality => {
                             municipality.style.fill = provinceColor;
                         });
 
-                        // Guardar el color de todos los municipios con ese id
                         matchingMunicipalities.forEach(municipality => {
                             savedColors[municipality.id] = provinceColor;
                         });
 
-                        // Guardar los colores y actualizar la lista
                         localStorage.setItem('coloresMunicipios', JSON.stringify(savedColors));
                         updateList();
                     }

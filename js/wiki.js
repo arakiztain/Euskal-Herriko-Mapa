@@ -15,7 +15,7 @@ export function buscarEnWikipedia(query) {
         origin: '*',
     });
 
-    // GET API Wikipedia
+    //GET API Wikipedia
     fetch(url + params.toString())
         .then(response => response.json())
         .then(data => {
@@ -28,10 +28,10 @@ export function buscarEnWikipedia(query) {
                 const resultadoDiv = document.getElementById('results');
                 resultadoDiv.innerHTML = '';
 
-                // Image?
+                //Image?
                 const thumbnail = pages[pageId].thumbnail ? pages[pageId].thumbnail.source : null;
 
-                // Info
+                //Info
                 const div = document.createElement('div');
                 div.classList.add('resultado');
                 div.innerHTML = `

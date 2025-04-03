@@ -23,12 +23,12 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         tooltip.style.display = 'none';
         document.body.appendChild(tooltip);
 
-        // Obtener todos los municipios del mapa (elementos path), excluyendo los que tienen "path" en su id
+        //Get all paths
         document.querySelectorAll('path').forEach(path => {
             if (path.id && !path.id.includes('path')) {
                 municipiosDisponibles.add(path.id);
 
-                // Obtener la provincia (grupo 'g') a la que pertenece el municipio
+                //get g
                 const provinciaId = path.closest('g') ? path.closest('g').id : null;
                 if (provinciaId) {
                     provincias.add(provinciaId);
@@ -41,7 +41,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     tooltip.innerHTML = `<pre> Udalerria: ${municipioId} \n Probintzia: ${provinciaId}<pre/>`;
                     tooltip.style.display = 'block';
 
-                    // Posicionar el tooltip
+                    //Tooltip
                     const pathRect = event.target.getBoundingClientRect();
                     tooltip.style.left = `${pathRect.left + window.scrollX + pathRect.width / 2 - tooltip.offsetWidth / 2}px`;
                     tooltip.style.top = `${pathRect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
@@ -66,7 +66,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                     });
                 });
 
-                // Evento mouseout
+                // Event mouseout
                 path.addEventListener('mouseout', function (event) {
                     tooltip.style.display = 'none';
 
@@ -193,25 +193,23 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         });
 
 
-        // Llamada a la función dentro del evento de input
+        //Suggestion
         const searchSuggestions = document.getElementById('search-suggestions');
         const searchInput = document.getElementById('search-input');
-
-        // Función de autocompletado
         searchInput.addEventListener('input', function () {
-            const query = searchInput.value.trim();  // Capturamos la entrada del usuario
-            suggestMunicipalities(query, municipiosDisponibles, searchSuggestions);  // Llamamos a la función para mostrar las sugerencias
+            const query = searchInput.value.trim(); 
+            suggestMunicipalities(query, municipiosDisponibles, searchSuggestions); 
         });
 
 
-        // Click fuera
+        //Click out
         document.addEventListener('click', function (event) {
             if (!event.target.closest('#search-input') && !event.target.closest('#search-suggestions')) {
                 searchSuggestions.innerHTML = '';
             }
         });
 
-        // Enter input
+        //Enter input
         searchInput.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 document.getElementById('search-btn').click();
