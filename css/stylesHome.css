@@ -189,6 +189,13 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    #logo-image{
+    display: none;
+      }
+      
+      .logo {
+    display: none;
+      }
     .hero::before {
         background-image: url('../assets/images/euskal herria.webp');
     }

@@ -153,26 +153,83 @@ header {
   display: none; 
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url('../assets/images/lauburu.webp');
+  background-size: 100px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
 main {
   display: flex;
-  flex-grow: 1;
+  margin: 20px;
+  height: calc(100vh - 100px);
+  min-height: 600px;
   overflow: hidden;
 }
 
+/* Estilo de cartela para el mapa */
 #mapa-container {
   flex: 3;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border: 1px solid #e0e0e0;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
-  padding: 10px;
+  overflow: hidden;
+  position: relative;
   background-image: url('../assets/images/arrano.png');
   background-size: 450px 178px;
   background-repeat: no-repeat;
   background-position: bottom left;
+  background-blend-mode: overlay;
+}
+
+/* Estilo de cartela INDEPENDIENTE para municipios-list */
+#municipios-list {
+  flex: 0.7;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   position: relative;
-  height: 100%;
-  width: 100%;
+  margin-left: 20px; /* Separación adicional */
+}
+
+/* Contenido interno de municipios-list */
+#mobile-nav {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#titulo-container {
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#provincia-list {
+  padding: 15px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+#footer {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
 }
 
 #contador-porcentaje{
@@ -196,10 +253,112 @@ svg {
 
 #municipios-list {
   flex: 0.7;
-  padding: 20px;
-  border-left: 2px solid #ccc;
+  padding: 0;
+  border-left: 1px solid #ddd;
   overflow-y: auto;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#mobile-nav {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+}
+
+#mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 15px;
+}
+
+#mobile-nav li {
+  padding: 8px 0;
+}
+
+#mobile-nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+#mobile-nav a:hover {
+  color: #f5a623;
+}
+
+#titulo-container {
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#titulo-img {
+  width: 35px;
+  height: auto;
+}
+
+#titulo {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+#provincia-list {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.provincia {
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.provincia:hover {
+  background-color: #e0e0e0;
+}
+
+.municipio {
+  margin-left: 20px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.porcentaje {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+#footer {
+  padding: 15px;
+  text-align: center;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#amnistia_img {
+  width: 25px;
+  height: auto;
 }
 
 #total-global {
@@ -313,12 +472,14 @@ pre {
   }
  
   body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
+    height: 100vh;
+    min-height: 100vh;
+    background-size: 100px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-image: url(../assets/images/lauburu.webp);
   }
 
   #municipios-list {
@@ -340,7 +501,10 @@ pre {
   #municipios-list.active {
     right: 0;
   }
-
+  .search-container {
+    padding-right: 54.5%;
+  }
+  
   #mobile-nav {
     display: flex; 
     justify-content: space-between;
@@ -374,7 +538,7 @@ pre {
   #menu-btn {
     display: flex;
     position: fixed;
-    top: 10%;
+    top: 20%;
     right: 15px;
     background: #f5a623;
     color: white;
@@ -396,7 +560,57 @@ pre {
   }
  
   #mapa-container {
-    padding-top: 0;
-    align-items: flex-start; 
+    width: 70%;
+    height: 100%;
+    background-color: #f8f9fa;
+    margin-right: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #mapa-container svg {
+
+    width: 100%;
+    height: 100%;
+    display: block;
+    min-width: 800px;
+    min-height: 600px;
+  }
+
+  .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 45px;
+    margin: 10px 0;
+    order: 2; 
+    flex-direction: column;
+    align-items: stretch;-
+  }
+
+  #search-input {
+    width: 100%;
+    min-width: auto;
+    margin-bottom: 8px;
+  }
+
+  #search-btn {
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .nav-container {
+    flex-wrap: wrap;
+    padding: 10px 0;
+  }
+
+  #search-suggestions {
+    width: calc(100% - 30px);
+    left: 15px;
+    transform: none;
   }
 }
