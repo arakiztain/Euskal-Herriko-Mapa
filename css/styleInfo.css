@@ -23,7 +23,7 @@ header {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0px;
   position: relative;
 }
 
@@ -34,6 +34,7 @@ header {
   font-weight: bold;
   white-space: nowrap;
   margin-right: 20px;
+  left: 0;
 }
 
 /* Buscador centrado */
@@ -113,7 +114,34 @@ header {
 .nav-links a:hover::after {
   width: 100%;
 }
+#search-suggestions {
+  position: absolute;
+  top: 100%; /* Lo posicionamos justo debajo del input */
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  max-height: 150px;
+  overflow-y: auto;
+  width: calc(100% - 20px);
+  z-index: 1000;
+  margin-top: 0; /* Quitamos el margin-top */
+}
 
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+  text-align: left; /* Aseguramos que el texto esté alineado a la izquierda */
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Asegura que el contenedor de sugerencias se ajuste dinámicamente */
+#search-suggestions:empty {
+  display: none; /* Ocultar las sugerencias cuando no haya ninguna */
+}
 /* Map Container Styles */
 #mapa-container {
   width: 70%;
