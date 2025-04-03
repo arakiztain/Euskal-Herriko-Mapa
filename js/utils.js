@@ -71,3 +71,4 @@ searchInput.addEventListener('input', function () {
     const query = searchInput.value.trim(); 
     sugerirMunicipios(query, municipiosDisponibles, searchSuggestions);  
 });
+

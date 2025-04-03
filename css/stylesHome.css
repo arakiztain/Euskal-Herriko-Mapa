@@ -49,8 +49,23 @@ nav {
 
 .nav-links a:hover {
     color: #f5a623;
-}
-
+  }
+  
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #f5a623;
+    transition: width 0.3s;
+  }
+  
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+  
 /* Hero Section Styles (Header) */
 .hero {
     position: relative;

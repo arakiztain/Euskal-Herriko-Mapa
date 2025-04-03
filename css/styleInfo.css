@@ -5,6 +5,8 @@ body {
   padding: 0;
   height: 100vh;
   overflow-x: hidden;
+  background-image: url(../assets/images/anboto.webp);
+  background-size:100px;
 }
 
 /* Header Styles */
@@ -156,6 +158,7 @@ header {
 }
 
 #mapa-container svg {
+
   width: 100%;
   height: 100%;
   display: block;
