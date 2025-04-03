@@ -1,4 +1,5 @@
-import { transformarTexto, coloresProvincias } from './utils.js';
+import { handleMapClick } from './clickMapa.js';
+import { normalizeText, provinceColors, suggestMunicipalities } from './utils.js';
 
 export async function loadMap() {
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
@@ -7,93 +8,90 @@ export async function loadMap() {
             document.getElementById('mapa-container').innerHTML = svg;
 
             const svgElement = document.querySelector('svg');
-            const coloresGuardados = JSON.parse(localStorage.getItem('coloresMunicipios')) || {};
-            const municipiosDisponibles = new Set();
+            const savedColors = JSON.parse(localStorage.getItem('coloresMunicipios')) || {};
+            const availableMunicipalities = new Set();
 
-            // Obtener todos los municipios del mapa (elementos path), excluyendo los que tienen "path" en su id
             document.querySelectorAll('path').forEach(path => {
                 if (path.id && !path.id.includes('path')) {
-                    municipiosDisponibles.add(path.id);
+                    availableMunicipalities.add(path.id);
                 }
             });
 
-            // Función para aplicar colores guardados
-            function aplicarColoresGuardados() {
-                Object.keys(coloresGuardados).forEach(id => {
+            function applySavedColors() {
+                Object.keys(savedColors).forEach(id => {
                     const paths = document.querySelectorAll(`path[id="${id}"]`);
-                    paths.forEach(path => path.style.fill = coloresGuardados[id]);
+                    paths.forEach(path => path.style.fill = savedColors[id]);
                 });
             }
 
             //Udalerriek eta margoek eguneratu
-            function actualizarLista() {
-                const provinciaListElement = document.getElementById('provincia-list');
-                const tituloElement = document.getElementById('titulo');
-                provinciaListElement.innerHTML = '';
+            function updateList() {
+                const provinceListElement = document.getElementById('province-list');
+                const titleElement = document.getElementById('title');
+                provinceListElement.innerHTML = '';
 
                 //Bateratute
-                const provinciasAgrupadas = {};
+                const groupedProvinces = {};
 
                 //Lurralde guztiek hartu svg-ko g-gaz
-                const provinciasGrupos = document.querySelectorAll('g');
+                const provinceGroups = document.querySelectorAll('g');
 
-                provinciasGrupos.forEach(grupoProvincia => {
-                    const provinciaId = grupoProvincia.id;
+                provinceGroups.forEach(provinceGroup => {
+                    const provinceId = provinceGroup.id;
 
                     //Lurraldeko udalerri guztiek
-                    const municipiosEnProvincia = Array.from(grupoProvincia.querySelectorAll('path'))
+                    const municipalitiesInProvince = Array.from(provinceGroup.querySelectorAll('path'))
                         .map(path => path.id);
 
                     //Margoztute dauzenak
-                    const selectedMunicipios = municipiosEnProvincia.filter(id => coloresGuardados[id] === coloresProvincias[provinciaId]);
+                    const selectedMunicipalities = municipalitiesInProvince.filter(id => savedColors[id] === provinceColors[provinceId]);
 
                     //Bikoitzak kendu (Set)
-                    const municipiosUnicos = [...new Set(selectedMunicipios)];
+                    const uniqueMunicipalities = [...new Set(selectedMunicipalities)];
 
-                    const totalMunicipios = [...new Set(municipiosEnProvincia.filter(municipio => !municipio.includes("path")))];
+                    const totalMunicipalities = [...new Set(municipalitiesInProvince.filter(municipality => !municipality.includes("path")))];
 
-                    const selectedMunicipiosUnicos = municipiosUnicos.length;
-
-                    if (!provinciasAgrupadas[provinciaId]) {
-                        provinciasAgrupadas[provinciaId] = {
-                            nombre: provinciaId,
-                            municipios: [...new Set(municipiosUnicos)],
-                            municipiosTotal: [...new Set(totalMunicipios)]
+                    if (!groupedProvinces[provinceId]) {
+                        groupedProvinces[provinceId] = {
+                            name: provinceId,
+                            municipalities: [...new Set(uniqueMunicipalities)],
+                            totalMunicipalities: [...new Set(totalMunicipalities)]
                         };
                     } else {
-                        provinciasAgrupadas[provinciaId].municipios.push(...municipiosUnicos);
-                        provinciasAgrupadas[provinciaId].municipiosTotal.push(...totalMunicipios);
+                        groupedProvinces[provinceId].municipalities.push(...uniqueMunicipalities);
+                        groupedProvinces[provinceId].totalMunicipalities.push(...totalMunicipalities);
                     }
                 });
 
                 //Lurraldeak antoleu
-                const provinciasOrdenadas = Object.keys(provinciasAgrupadas).sort((a, b) => {
-                    const nombreA = provinciasAgrupadas[a].nombre.toLowerCase();
-                    const nombreB = provinciasAgrupadas[b].nombre.toLowerCase();
-                    return nombreA.localeCompare(nombreB);
+                const sortedProvinces = Object.keys(groupedProvinces).sort((a, b) => {
+                    console.log(groupedProvinces[a]);
+                    const nameA = groupedProvinces[a].name.toLowerCase();
+                    const nameB = groupedProvinces[b].name.toLowerCase();
+                    return nameA.localeCompare(nameB);
                 });
 
                 let selectedGlobal = 0;
                 let TotalGlobal = 0;
 
                 //Lurraldeak eta udalerriak zerrendan ipiñi
-                provinciasOrdenadas.forEach(provinciaId => {
-                    const provincia = provinciasAgrupadas[provinciaId];
-                    const por = ([... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length / [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length) * 100;
-                    selectedGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipios"])].length;
-                    TotalGlobal += [... new Set(Object.values(provinciasAgrupadas).find(objeto => objeto.nombre === provinciaId)["municipiosTotal"])].length;
+                sortedProvinces.forEach(provinceId => {
+                    const province = groupedProvinces[provinceId];
+                    const percentage = ([... new Set(Object.values(groupedProvinces).find(item => item.name === provinceId)["municipalities"])].length / [... new Set(Object.values(groupedProvinces).find(item => item.name === provinceId)["totalMunicipalities"])].length) * 100;
+                    selectedGlobal += [... new Set(Object.values(groupedProvinces).find(item => item.name === provinceId)["municipalities"])].length;
+                    TotalGlobal += [... new Set(Object.values(groupedProvinces).find(item => item.name === provinceId)["totalMunicipalities"])].length;
 
                     //Lurraldeak    
-                    const provinciaDiv = document.createElement('div');
-                    provinciaDiv.className = 'provincia';
-                    provinciaDiv.innerHTML = `${provincia.nombre} (%${por.toFixed(2)})`;
-                    provincia.municipios = [...new Set(provincia.municipios)];
+                    const provinceDiv = document.createElement('div');
+                    provinceDiv.className = 'province';
+                    provinceDiv.innerHTML = `${province.name} (%${percentage.toFixed(2)})`;
+                    province.municipalities = [...new Set(province.municipalities)];
                     const ul = document.createElement('ul');
 
                     //Udalerriak
-                    provincia.municipios.sort().forEach(id => {
+                    province.municipalities.sort().forEach(id => {
                         const li = document.createElement('li');
-                        li.className = 'municipio';
+                        li.className = 'municipality';
 
                         const span = document.createElement('span');
                         span.textContent = id;
@@ -101,131 +99,101 @@ export async function loadMap() {
                         //Info Wikipedia button
                         const infoImage = document.createElement('img');
                         infoImage.className = "infoImage";
-                        infoImage.src = '../assets/images/info.png'; 
-                        infoImage.alt = 'Más información';
-                        infoImage.style.cursor = 'pointer'; 
-                        infoImage.style.marginLeft = '10px'; 
+                        infoImage.src = '../assets/images/info.png';
+                        infoImage.alt = 'Informaziño gehiau';
+                        infoImage.style.cursor = 'pointer';
+                        infoImage.style.marginLeft = '10px';
                         const a = document.createElement('a');
                         a.href = `https://eu.wikipedia.org/wiki/${id}`;
-                        a.target = '_blank'; 
-                        a.appendChild(infoImage); 
-                 
+                        a.target = '_blank';
+                        a.appendChild(infoImage);
+
                         li.appendChild(span);
-                        li.appendChild(a); 
+                        li.appendChild(a);
 
                         ul.appendChild(li);
                     });
 
-
-                    provinciaDiv.appendChild(ul);
-                    provinciaListElement.appendChild(provinciaDiv);
+                    provinceDiv.appendChild(ul);
+                    provinceListElement.appendChild(provinceDiv);
                 });
 
                 //%
-                const TotalGlobalbal = (selectedGlobal / TotalGlobal) * 100;
-                tituloElement.textContent = `Egondako herrialdetan (%${TotalGlobalbal.toFixed(2)})`;
-                let contadorPorcentaje = document.createElement("div");
-                contadorPorcentaje.id = "contador-porcentaje";
-                document.getElementById("mapa-container").appendChild(contadorPorcentaje);
-                contadorPorcentaje.innerText = `Euskal Herria: %${TotalGlobalbal.toFixed(2)}`;
+                const globalPercentage = (selectedGlobal / TotalGlobal) * 100;
+                titleElement.textContent = `Egondako herrialdetan (%${globalPercentage.toFixed(2)})`;
+                let percentageCounter = document.createElement("div");
+                percentageCounter.id = "contador-porcentaje";
+                document.getElementById("mapa-container").appendChild(percentageCounter);
+                percentageCounter.innerText = `Euskal Herria: %${globalPercentage.toFixed(2)}`;
             }
 
-
-            aplicarColoresGuardados();
-            actualizarLista();
+            applySavedColors();
+            updateList();
 
             //Button
             document.getElementById('search-btn').addEventListener('click', function () {
-                const inputNombre = document.getElementById('search-input').value.trim();
+                const inputText = document.getElementById('search-input').value.trim();
 
-                if (inputNombre === '') {
+                if (inputText === '') {
                     alert("Idatzi udalerriaren izena.");
                     return;
                 }
 
-                const nombreNormalizado = transformarTexto(inputNombre);
-                const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
+                const normalizedName = normalizeText(inputText);
+                const matchingMunicipalities = document.querySelectorAll(`path[id="${normalizedName}"]`);
 
-                if (municipiosConMismoId.length > 0) {
-                    let provinciaColor = null;
+                if (matchingMunicipalities.length > 0) {
+                    let provinceColor = null;
 
                     // Obtener el grupo de la provincia del primer municipio
-                    const grupoProvincia = municipiosConMismoId[0].closest('g');
-                    const provinciaId = grupoProvincia ? grupoProvincia.id : null;
+                    const provinceGroup = matchingMunicipalities[0].closest('g');
+                    const provinceId = provinceGroup ? provinceGroup.id : null;
 
-                    if (provinciaId) {
+                    if (provinceId) {
                         // Obtener el color de la provincia asociada al grupo
-                        provinciaColor = coloresProvincias[provinciaId];
+                        provinceColor = provinceColors[provinceId];
 
                         // Comprobar si el municipio ya está coloreado
-                        if (coloresGuardados[nombreNormalizado]) {
-                            alert(`${nombreNormalizado} jadanik margotute dau.`);
+                        if (savedColors[normalizedName]) {
+                            alert(`${normalizedName} jadanik margotute dau.`);
                             return;
                         }
 
                         // Colorear todos los paths con el mismo ID
-                        municipiosConMismoId.forEach(municipio => {
-                            municipio.style.fill = provinciaColor;
+                        matchingMunicipalities.forEach(municipality => {
+                            municipality.style.fill = provinceColor;
                         });
 
                         // Guardar el color de todos los municipios con ese id
-                        municipiosConMismoId.forEach(municipio => {
-                            coloresGuardados[municipio.id] = provinciaColor;
+                        matchingMunicipalities.forEach(municipality => {
+                            savedColors[municipality.id] = provinceColor;
                         });
 
                         // Guardar los colores y actualizar la lista
-                        localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
-                        actualizarLista();
+                        localStorage.setItem('coloresMunicipios', JSON.stringify(savedColors));
+                        updateList();
                     }
                 } else {
                     alert("Ez da aurkitu udalerri mapan.");
                 }
             });
 
-            // Función de autocompletado
+            //Suggestion
             const searchSuggestions = document.getElementById('search-suggestions');
             const searchInput = document.getElementById('search-input');
-
             searchInput.addEventListener('input', function () {
-                const query = searchInput.value.trim().toLowerCase();
-
-                // Limpiar las sugerencias anteriores
-                searchSuggestions.innerHTML = '';
-
-                if (query === '') return;
-
-                // Filtrar municipios que coincidan con la búsqueda
-                const sugerencias = Array.from(municipiosDisponibles).filter(municipioId =>
-                    municipioId.toLowerCase().includes(query)
-                );
-
-                // Mostrar las sugerencias
-                sugerencias.forEach(municipio => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.className = 'suggestion-item';
-                    suggestionItem.textContent = municipio;
-                    suggestionItem.addEventListener('click', function () {
-                        // Cuando se hace clic en una sugerencia, se selecciona y colorea
-                        searchInput.value = municipio;
-                        searchSuggestions.innerHTML = ''; // Limpiar sugerencias
-
-                        const path = document.querySelector(`path[id="${municipio}"]`);
-                        if (path) {
-                            path.click(); // Simular un clic en el municipio
-                        }
-                    });
-                    searchSuggestions.appendChild(suggestionItem);
-                });
+                const query = searchInput.value.trim();
+                suggestMunicipalities(query, availableMunicipalities, searchSuggestions);
             });
 
-            // Ocultar sugerencias si se hace clic fuera
+            //Hide
             document.addEventListener('click', function (event) {
                 if (!event.target.closest('#search-input') && !event.target.closest('#search-suggestions')) {
                     searchSuggestions.innerHTML = '';
                 }
             });
 
-            // Manejo del evento Enter en el campo de búsqueda (input)
+            //{Enter} search
             searchInput.addEventListener('keydown', function (event) {
                 if (event.key === 'Enter') {
                     // Simular el clic en el botón de búsqueda
@@ -233,59 +201,9 @@ export async function loadMap() {
                 }
             });
 
-            // Manejo del clic en el mapa
+            //Funcion
             svgElement.addEventListener('click', function (event) {
-                if (event.target.tagName === 'path') {
-                    const municipioId = event.target.id;
-                    let provinciaColor = null;
-
-                    // Buscar el grupo <g> más cercano al <path> clicado
-                    const grupoProvincia = event.target.closest('g');
-                    const provinciaId = grupoProvincia ? grupoProvincia.id : null;
-
-                    if (provinciaId) {
-                        // Obtener el color de la provincia asociada al grupo
-                        provinciaColor = coloresProvincias[provinciaId];
-
-                        // Si el municipio ya tiene un color asignado, lo eliminamos
-                        if (coloresGuardados[municipioId]) {
-                            const paths = document.querySelectorAll(`path[id="${municipioId}"]`);
-                            paths.forEach(path => path.style.fill = '#ffeabf'); // Color por defecto
-                            delete coloresGuardados[municipioId];
-                        } else {
-                            // Solicitar el nombre del municipio mediante un prompt
-                            const inputNombre = prompt('Sartu ezazu udalerriaren izena:', municipioId);
-                            if (inputNombre) {
-                                const nombreNormalizado = transformarTexto(inputNombre);
-                                const municipiosConMismoId = document.querySelectorAll(`path[id="${nombreNormalizado}"]`);
-
-                                if (municipiosConMismoId.length > 0) {
-                                    // Comprobar si el municipio ya está coloreado
-                                    if (coloresGuardados[nombreNormalizado]) {
-                                        alert(`El municipio ${nombreNormalizado} ya está seleccionado.`);
-                                        return;
-                                    }
-
-                                    // Aplicar el color de la provincia a todos los paths con el mismo ID
-                                    municipiosConMismoId.forEach(municipio => {
-                                        municipio.style.fill = provinciaColor;
-                                    });
-
-                                    // Guardar el color de todos los municipios con ese id
-                                    municipiosConMismoId.forEach(municipio => {
-                                        coloresGuardados[municipio.id] = provinciaColor;
-                                    });
-                                } else {
-                                    alert("Ez da aurkitu udalerria mapan.");
-                                }
-                            }
-                        }
-
-                        // Guardar los colores y actualizar la lista
-                        localStorage.setItem('coloresMunicipios', JSON.stringify(coloresGuardados));
-                        actualizarLista();
-                    }
-                }
+               handleMapClick(event, provinceColors, savedColors, normalizeText, updateList)
             });
         })
         .catch(error => console.error('Error al cargar el SVG:', error));

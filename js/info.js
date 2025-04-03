@@ -1,5 +1,5 @@
 import { buscarEnWikipedia } from "./wiki.js";
-import { transformarTexto, coloresProvincias, sugerirMunicipios } from "./utils.js";
+import { normalizeText, provinceColors, suggestMunicipalities } from "./utils.js";
 
 fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
     .then(response => response.text())
@@ -76,7 +76,7 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
                             if (provinciaList.size > 0) {
                                 buscarEnWikipedia([...provinciaList][provinciaList.size - 1]);
                             }
-                            document.getElementById('resultados').innerHTML = "";
+                            document.getElementById('results').innerHTML = "";
                             relatedPath.style.fill = '#ffeabf';
                             previousHighlightedPaths.pop(relatedPath);
                         });
@@ -85,13 +85,13 @@ fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
             }
         });
 
- // Versión corregida del código de los checkboxes
-const Resultcheckbox = document.getElementById('checkbox');
-provincias.forEach(provincia => {
-    const provinciaDiv = document.createElement('div');
-    provinciaDiv.className = 'provincia-card';
-    
-    provinciaDiv.innerHTML = `
+        //Checkbox
+        const Resultcheckbox = document.getElementById('checkbox');
+        provincias.forEach(provincia => {
+            const provinciaDiv = document.createElement('div');
+            provinciaDiv.className = 'provincia-card';
+
+            provinciaDiv.innerHTML = `
         <div class="card-header">${provincia}</div>
         <div class="card-image-container">
             <input type="checkbox" id="provincia-${provincia}" class="provincia-checkbox" />
@@ -101,87 +101,85 @@ provincias.forEach(provincia => {
         </div>
     `;
 
-    const checkbox = provinciaDiv.querySelector('.provincia-checkbox');
-    const label = provinciaDiv.querySelector('.card-label');
-    
-    // Manejar el cambio en el checkbox
-    checkbox.addEventListener('change', function() {
-        const checkboxId = this.id.replace('provincia-', '');
-        const grupoProvincia = document.querySelectorAll(`g[id="${checkboxId}"]`);
+            const checkbox = provinciaDiv.querySelector('.provincia-checkbox');
+            const label = provinciaDiv.querySelector('.card-label');
 
-        if (this.checked) {
-            // Cuando se selecciona
-            buscarEnWikipedia(checkboxId);
-            provinciaList.add(checkboxId);
-            
-            grupoProvincia.forEach(grupo => {
-                const paths = grupo.querySelectorAll('path');
-                const color = coloresProvincias[checkboxId];
-                paths.forEach(path => {
-                    if (!path.id.includes('path')) {
-                        path.style.fill = color;
+            //Change
+            checkbox.addEventListener('change', function () {
+                const checkboxId = this.id.replace('provincia-', '');
+                const grupoProvincia = document.querySelectorAll(`g[id="${checkboxId}"]`);
+
+                if (this.checked) {
+                    buscarEnWikipedia(checkboxId);
+                    provinciaList.add(checkboxId);
+
+                    grupoProvincia.forEach(grupo => {
+                        const paths = grupo.querySelectorAll('path');
+                        const color = provinceColors[checkboxId];
+                        paths.forEach(path => {
+                            if (!path.id.includes('path')) {
+                                path.style.fill = color;
+                            }
+                        });
+                    });
+                    provinciaColoreada.add(checkboxId);
+                    provinciaDiv.classList.add('selected');
+                } else {
+                    //Quit
+                    grupoProvincia.forEach(grupo => {
+                        grupo.querySelectorAll('path').forEach(path => {
+                            if (!path.id.includes('path')) {
+                                path.style.fill = '#ffeabf';
+                            }
+                        });
+                    });
+
+                    provinciaList.delete(checkboxId);
+                    provinciaColoreada.delete(checkboxId);
+                    provinciaDiv.classList.remove('selected');
+
+                    if (provinciaList.size > 0) {
+                        buscarEnWikipedia([...provinciaList].pop());
+                    } else {
+                        document.getElementById('results').innerHTML = "";
+                        buscarEnWikipedia("Not");
                     }
-                });
+                }
             });
-            provinciaColoreada.add(checkboxId);
-            provinciaDiv.classList.add('selected');
-        } else {
-            // Cuando se deselecciona
-            grupoProvincia.forEach(grupo => {
-                grupo.querySelectorAll('path').forEach(path => {
-                    if (!path.id.includes('path')) {
-                        path.style.fill = '#ffeabf';
-                    }
-                });
+
+            
+            provinciaDiv.addEventListener('click', function (event) {
+                if (event.target !== checkbox && event.target !== label && !label.contains(event.target)) {
+                    checkbox.checked = !checkbox.checked;
+                    const changeEvent = new Event('change');
+                    checkbox.dispatchEvent(changeEvent);
+                }
             });
-            
-            provinciaList.delete(checkboxId);
-            provinciaColoreada.delete(checkboxId);
-            provinciaDiv.classList.remove('selected');
-            
-            if (provinciaList.size > 0) {
-                buscarEnWikipedia([...provinciaList].pop());
-            } else {
-                document.getElementById('resultados').innerHTML = "";
-                buscarEnWikipedia("Not");
-            }
-        }
-    });
 
-    // Manejar clic en toda la carta
-    provinciaDiv.addEventListener('click', function(event) {
-        // Si el clic no fue directamente en el checkbox o el label
-        if (event.target !== checkbox && event.target !== label && !label.contains(event.target)) {
-            checkbox.checked = !checkbox.checked;
-            const changeEvent = new Event('change');
-            checkbox.dispatchEvent(changeEvent);
-        }
-    });
+            Resultcheckbox.appendChild(provinciaDiv);
+        });
 
-    Resultcheckbox.appendChild(provinciaDiv);
-});
-
-        // Configurar el botón de búsqueda
+        //Search button
         document.getElementById('search-btn').addEventListener('click', function () {
-            const query = transformarTexto(document.getElementById('search-input').value.trim());
+            const query = normalizeText(document.getElementById('search-input').value.trim());
 
             if (query) {
-                // Limpiar resultados anteriores
-                document.getElementById('resultados').innerHTML = "";
+                //Clean
+                document.getElementById('results').innerHTML = "";
 
-                // Eliminar el color rojo de los municipios anteriores
+                //delete 
                 previousHighlightedPaths.forEach(path => {
                     path.style.fill = '#ffeabf';
                 });
 
-                // Vaciar el array de los municipios coloreados
+                //Clean
                 previousHighlightedPaths = [];
 
-                // Seleccionar los nuevos paths correspondientes a la búsqueda
+               
                 const newPaths = document.querySelectorAll(`path[id="${query.split('_')[0]}"]`);
 
 
-                // Colorear de rojo los nuevos paths
+                //Paint
                 newPaths.forEach((relatedPath) => {
                     relatedPath.style.fill = 'white';
                     relatedPath.style.transition = 'all 0.5s ease';
@@ -202,7 +200,7 @@ provincias.forEach(provincia => {
         // Función de autocompletado
         searchInput.addEventListener('input', function () {
             const query = searchInput.value.trim();  // Capturamos la entrada del usuario
-            sugerirMunicipios(query, municipiosDisponibles, searchSuggestions);  // Llamamos a la función para mostrar las sugerencias
+            suggestMunicipalities(query, municipiosDisponibles, searchSuggestions);  // Llamamos a la función para mostrar las sugerencias
         });
 
 

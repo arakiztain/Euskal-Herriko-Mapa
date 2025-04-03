@@ -1,4 +1,4 @@
-export const coloresProvincias = {
+export const provinceColors = {
     "Bizkaia": "#0f7e21", // Orlegie
     "Gipuzkoa": "#107bca", // Oztiñe
     "Araba": "#dcdc0a", // Bellegi
@@ -18,43 +18,45 @@ export function checkVersion() {
         });
 }
 
-export function transformarTexto(texto) {
-    const excepciones = ['de', 'la', 'el', 'en', 'y', 'a', 'del', 'al'];
+export function normalizeText(text) {
+    const exceptions = ['de', 'la', 'el', 'en', 'y', 'a', 'del', 'al'];
 
-    return texto
+    return text
         .split(/(\s|-)/)
         .map((part, index, arr) => {
             if (part === ' ' || part === '-') return part;
-            const esPrimeraPalabra = (index === 0 || arr[index - 1] === ' ' || arr[index - 1] === '-');
-            const palabraEnMin = part.toLowerCase();
+            const isFirstWord = (index === 0 || arr[index - 1] === ' ' || arr[index - 1] === '-');
+            const lowerCaseWord = part.toLowerCase();
 
-            if (!esPrimeraPalabra && excepciones.includes(palabraEnMin)) {
-                return palabraEnMin;
+            if (!isFirstWord && exceptions.includes(lowerCaseWord)) {
+                return lowerCaseWord;
             }
-            return palabraEnMin.charAt(0).toUpperCase() + palabraEnMin.slice(1);
+            return lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
         })
         .join('');
 }
 
-export function sugerirMunicipios(query, municipiosDisponibles, searchSuggestions) {
+
+export function suggestMunicipalities(query, availableMunicipalities, searchSuggestions) {
     searchSuggestions.innerHTML = '';
 
     if (query === '') return;
 
-    const sugerencias = Array.from(municipiosDisponibles).filter(municipioId =>
-        municipioId.toLowerCase().startsWith(query.toLowerCase()) 
+    const suggestions = Array.from(availableMunicipalities).filter(municipalityId =>
+        municipalityId.toLowerCase().startsWith(query.toLowerCase()) 
     );
 
-    sugerencias.forEach(municipio => {
+    suggestions.forEach(municipality => {
         const suggestionItem = document.createElement('div');
         suggestionItem.className = 'suggestion-item';
-        suggestionItem.textContent = municipio;
+        suggestionItem.textContent = municipality;
 
         suggestionItem.addEventListener('click', function () {
-            searchInput.value = municipio;
+            const searchInput = document.getElementById('search-input');
+            searchInput.value = municipality;
             searchSuggestions.innerHTML = ''; 
 
-            const path = document.querySelector(`path[id="${municipio}"]`);
+            const path = document.querySelector(`path[id="${municipality}"]`);
             if (path) {
                 path.click(); 
             }

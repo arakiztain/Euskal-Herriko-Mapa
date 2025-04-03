@@ -191,8 +191,7 @@ main {
   background-blend-mode: overlay;
 }
 
-/* Estilo de cartela INDEPENDIENTE para municipios-list */
-#municipios-list {
+#municipalities-list {
   flex: 0.7;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -203,26 +202,19 @@ main {
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  margin-left: 20px; /* Separación adicional */
+  margin-left: 20px;
 }
 
-/* Contenido interno de municipios-list */
 #mobile-nav {
   padding: 15px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #e0e0e0;
 }
 
-#titulo-container {
+#title-container {
   padding: 15px;
   background-color: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
-}
-
-#provincia-list {
-  padding: 15px;
-  flex-grow: 1;
-  overflow-y: auto;
 }
 
 #footer {
@@ -249,17 +241,6 @@ svg {
 }
 #menu-btn {
   display: none;
-}
-
-#municipios-list {
-  flex: 0.7;
-  padding: 0;
-  border-left: 1px solid #ddd;
-  overflow-y: auto;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 #mobile-nav {
@@ -292,7 +273,7 @@ svg {
   color: #f5a623;
 }
 
-#titulo-container {
+#title-container {
   padding: 15px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
@@ -312,14 +293,14 @@ svg {
   font-size: 1.2rem;
 }
 
-#provincia-list {
+#province-list {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
   background-color: #fff;
 }
 
-.provincia {
+.province {
   font-weight: bold;
   margin-top: 15px;
   padding: 10px;
@@ -330,11 +311,11 @@ svg {
   transition: all 0.3s;
 }
 
-.provincia:hover {
+.province:hover {
   background-color: #e0e0e0;
 }
 
-.municipio {
+.municipality {
   margin-left: 20px;
   padding: 8px 0;
   border-bottom: 1px solid #eee;
@@ -369,23 +350,14 @@ svg {
   background-color: #f9f9f9;
 }
 
-#municipios-list h2 {
+#municipalities-list h2 {
   text-align: center;
   margin-bottom: 10px;
 }
 
-#municipios-list ul {
+#municipalities-list ul {
   list-style-type: none;
   padding-left: 0;
-}
-
-.provincia {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.municipio {
-  margin-left: 20px;
 }
 
 .porcentaje {
@@ -397,11 +369,11 @@ svg {
   height: auto;
 }
 
-#titulo {
+#title {
   margin: 10;
 }
 
-#titulo-container {
+#title-container {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -482,23 +454,7 @@ pre {
     background-image: url(../assets/images/lauburu.webp);
   }
 
-  #municipios-list {
-    position: fixed;
-    top: 0;
-    right: -100%; 
-    width: 80%; 
-    max-width: 300px;
-    height: 100vh;
-    background: rgba(249, 249, 249, 0.95);
-    backdrop-filter: blur(8px);
-    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: right 0.3s ease-out;
-    padding: 20px 15px;
-    border-left: 1px solid #ddd;
-  }
-
-  #municipios-list.active {
+  #municipalities-list.active {
     right: 0;
   }
   .search-container {
@@ -588,7 +544,7 @@ pre {
     margin: 10px 0;
     order: 2; 
     flex-direction: column;
-    align-items: stretch;-
+    align-items: stretch;
   }
 
   #search-input {

@@ -1,10 +1,10 @@
-import { transformarTexto } from "./utils.js";
+import { normalizeText } from "./utils.js";
 
 let municipioColoreado = null;
 
 export function buscarEnWikipedia(query) {
     const url = `https://eu.wikipedia.org/w/api.php?`;
-    query = transformarTexto(query);
+    query = normalizeText(query);
     const params = new URLSearchParams({
         action: 'query',
         format: 'json',
@@ -25,10 +25,10 @@ export function buscarEnWikipedia(query) {
             if (pages[pageId] && pages[pageId].extract) {
                 
                 const extracto = pages[pageId].extract;
-                const resultadoDiv = document.getElementById('resultados');
+                const resultadoDiv = document.getElementById('results');
                 resultadoDiv.innerHTML = '';
 
-                // Image
+                // Image?
                 const thumbnail = pages[pageId].thumbnail ? pages[pageId].thumbnail.source : null;
 
                 // Info
@@ -48,26 +48,15 @@ export function buscarEnWikipedia(query) {
                     }
                 }
 
-                // const path = document.querySelector(`path[id="${query}"]`);
-
-                // const grupos = document.querySelectorAll(`g[id="${path}"]`);
-                // console.log(grupos);
-                // if (path || grupos) {
-                //     path.style.fill = 'red';
-                //     municipioColoreado = query;
-                // }else {
-                //     alert('Municipio no encontrado en el mapa.');
-                // }
-                
             } else {
-                const resultadoDiv = document.getElementById('resultados');
+                const resultadoDiv = document.getElementById('results');
                 resultadoDiv.innerHTML = '<p>Ez da udalerria aurkitu. Beste bategaz saiatu.</p>';
             }
         })
         .catch(error => console.error('Error al consultar la API de Wikipedia:', error));
 }
 
-// Opción para buscar cuando se presiona Enter
+
 document.getElementById('search-input').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         document.getElementById('search-btn').click();
