@@ -1,5 +1,4 @@
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -19,25 +18,29 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 100%;
+  margin-left: 1%;
   margin: 0 auto;
   padding: 0px;
   position: relative;
 }
 
 #logo-image{
+  margin-left: 1;
   width: 4%;
   height: 8%;
+  margin-right: 0;
 }
 
 .logo {
+  padding-top: 0;
   color: #fff;
-  font-size: 24px;
+  font-size: 28px;
+  margin-left: 1%;
   text-decoration: none;
   font-weight: bold;
   white-space: nowrap;
-  margin-right: 20px;
-  left: 0;
+  padding: 0;
 }
 
 .search-container {
@@ -45,7 +48,9 @@ header {
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  max-width: 600px;
+  margin-top: 0;
+  padding-right: 24.5%;
+  max-width: 30%;
   margin: 0 20px;
 }
 
@@ -81,6 +86,7 @@ header {
   margin: 0;
   padding: 0;
   margin-left: 20px;
+  margin-right: 1%;
 }
 
 .nav-links li {
@@ -118,16 +124,19 @@ header {
 
 #search-suggestions {
   position: absolute;
-  top: 100%; 
-  left: 0;
-  right: 0;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%); 
+  width: 80%; 
+  max-width: 500px;
   background-color: white;
   border: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
   max-height: 150px;
   overflow-y: auto;
-  width: calc(100% - 20px);
   z-index: 1000;
-  margin-top: 0; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 2px;
 }
 
 .suggestion-item {
@@ -177,6 +186,7 @@ svg {
   max-height: none;
   transition: transform 0.2s ease;
 }
+
 #mobile-nav{
   display: none;
 }
@@ -238,27 +248,28 @@ svg {
   gap: 10px;
 }
 
-/* Estilo para el contenedor de resultados */
+
 #resultados {
-  width: 300px; /* Establece un ancho fijo */
+  width: 300px; 
   background-color: #ecf0f1;
   border-radius: 5px;
   padding: 10px;
-  height: 600px; /* Ajusta según el tamaño que necesites */
-  overflow-y: auto; /* Permite el desplazamiento si el contenido es largo */
+  height: 600px; 
+  overflow-y: auto; 
 }
 
 pre {
   background-color: #f4f4f4; 
   padding: 5px;
   border-radius: 5px;
-  font-family: 'Courier New', monospace; /* Fuente de tipo monoespaciado */
-  font-size: 16px; /* Tamaño de la fuente */
-  color: #333; /* Color del texto */
+  font-family: 'Courier New', monospace; 
+  font-size: 16px; 
+  color: #333;
   text-align: center;
   justify-content: center;
-  overflow-x: auto; /* Desplazamiento horizontal si el contenido es muy largo */
+  overflow-x: auto; 
 }
+
 .infoImage{
   width: 12px;
   height: 12px;
@@ -289,9 +300,11 @@ pre {
   .logo{
     display: none;
   }
+
   #logo-image{
    display: none;
   }
+  
   #mapa-container {
     flex: 8;
     padding: 0;
@@ -305,7 +318,7 @@ pre {
     padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Cambiado de height a min-height */
+    min-height: 100vh; 
   }
 
   #municipios-list {
@@ -376,9 +389,14 @@ pre {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
+  #search-suggestions {
+    width: 95%; 
+    left: 50%;
+    transform: translateX(-50%);
+  }
  
   #mapa-container {
-    padding-top: 0; /* Elimina cualquier padding superior */
-    align-items: flex-start; /* Alinea el contenido arriba */
+    padding-top: 0;
+    align-items: flex-start; 
   }
 }
