@@ -1,4 +1,8 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "sequelize": "^6.37.7"

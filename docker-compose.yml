@@ -9,7 +9,7 @@ services:
       MYSQL_USER: bixente
       MYSQL_PASSWORD: bixente123
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
