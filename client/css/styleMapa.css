@@ -1,0 +1,572 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  background-color: #333;
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100%;
+  margin-left: 1%;
+  margin: 0 auto;
+  padding: 0px;
+  position: relative;
+}
+
+#logo-image{
+  margin-left: 1;
+  width: 4%;
+  height: 8%;
+  margin-right: 0;
+}
+
+.logo {
+  padding-top: 0;
+  color: #fff;
+  font-size: 28px;
+  margin-left: 1%;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-top: 0;
+  padding-right: 24.5%;
+  max-width: 30%;
+  margin: 0 20px;
+}
+
+#search-input {
+  padding: 8px 15px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: none;
+  width: 100%;
+  min-width: 200px;
+}
+
+#search-btn {
+  padding: 8px 20px;
+  font-size: 16px;
+  background-color: #f5a623;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+#search-btn:hover {
+  background-color: #f39c12;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+  margin-right: 1%;
+}
+
+.nav-links li {
+  margin-left: 25px;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s;
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  color: #f5a623;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #f5a623;
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+#search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%); 
+  width: 80%; 
+  max-width: 500px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-top: 2px;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+  text-align: left; 
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+#search-suggestions:empty {
+  display: none; 
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url('../assets/images/lauburu.webp');
+  background-size: 100px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+main {
+  display: flex;
+  margin: 20px;
+  height: calc(100vh - 100px);
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* Estilo de cartela para el mapa */
+#mapa-container {
+  flex: 3;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  background-image: url('../assets/images/arrano.png');
+  background-size: 450px 178px;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-blend-mode: overlay;
+}
+
+#municipalities-list {
+  flex: 0.7;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  margin-left: 20px;
+}
+
+#mobile-nav {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#title-container {
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#footer {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+#contador-porcentaje{
+  display: none;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  transition: transform 0.2s ease;
+}
+
+#mobile-nav{
+  display: none;
+}
+#menu-btn {
+  display: none;
+}
+
+#mobile-nav {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+}
+
+#mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 15px;
+}
+
+#mobile-nav li {
+  padding: 8px 0;
+}
+
+#mobile-nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+#mobile-nav a:hover {
+  color: #f5a623;
+}
+
+#title-container {
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#titulo-img {
+  width: 35px;
+  height: auto;
+}
+
+#titulo {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+#province-list {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.province {
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.province:hover {
+  background-color: #e0e0e0;
+}
+
+.municipality {
+  margin-left: 20px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.porcentaje {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+#footer {
+  padding: 15px;
+  text-align: center;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#amnistia_img {
+  width: 25px;
+  height: auto;
+}
+
+#total-global {
+  flex: 1;
+  padding: 20px;
+  border-left: 2px solid #ccc;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+#municipalities-list h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#municipalities-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.porcentaje {
+  color: green;
+}
+
+#titulo-img {
+  width: 35px;
+  height: auto;
+}
+
+#title {
+  margin: 10;
+}
+
+#title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+#resultados {
+  width: 300px; 
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  padding: 10px;
+  height: 600px; 
+  overflow-y: auto; 
+}
+
+pre {
+  background-color: #f4f4f4; 
+  padding: 5px;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace; 
+  font-size: 16px; 
+  color: #333;
+  text-align: center;
+  justify-content: center;
+  overflow-x: auto; 
+}
+
+.infoImage{
+  width: 12px;
+  height: 12px;
+}
+
+.infoImage:hover{
+  scale: 1.45;
+}
+
+#footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#amnistia_img {
+  width: 25px;
+  height: auto;
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  header {
+    padding: 15px;
+    font-size: 0.8rem;
+  }
+  
+  .logo{
+    display: none;
+  }
+
+  #logo-image{
+   display: none;
+  }
+  
+  #mapa-container {
+    flex: 8;
+    padding: 0;
+    background-size: 150px 78px;
+    padding-bottom: 0%;
+  }
+ 
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    min-height: 100vh;
+    background-size: 100px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-image: url(../assets/images/lauburu.webp);
+  }
+
+  #municipalities-list.active {
+    right: 0;
+  }
+  .search-container {
+    padding-right: 54.5%;
+  }
+  
+  #mobile-nav {
+    display: flex; 
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+  }
+
+  #mobile-nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #mobile-nav li {
+    padding: 10px 15px;
+
+  }
+
+  #mobile-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  #menu-btn {
+    display: flex;
+    position: fixed;
+    top: 20%;
+    right: 15px;
+    background: #f5a623;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 1001;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  #search-suggestions {
+    width: 95%; 
+    left: 50%;
+    transform: translateX(-50%);
+  }
+ 
+  #mapa-container {
+    width: 70%;
+    height: 100%;
+    background-color: #f8f9fa;
+    margin-right: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #mapa-container svg {
+
+    width: 100%;
+    height: 100%;
+    display: block;
+    min-width: 800px;
+    min-height: 600px;
+  }
+
+  .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 45px;
+    margin: 10px 0;
+    order: 2; 
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #search-input {
+    width: 100%;
+    min-width: auto;
+    margin-bottom: 8px;
+  }
+
+  #search-btn {
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .nav-container {
+    flex-wrap: wrap;
+    padding: 10px 0;
+  }
+
+  #search-suggestions {
+    width: calc(100% - 30px);
+    left: 15px;
+    transform: none;
+  }
+}

@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mapa
+      MYSQL_USER: bixente
+      MYSQL_PASSWORD: bixente123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: bixente
+      DB_PASSWORD: bixente123
+      DB_NAME: mapa
+    networks:
+      - backend-net
+
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "5173:5173"   # o el puerto que uses (Vite, React, etc)
+    depends_on:
+      - server
+    networks:
+      - backend-net
+
+volumes:
+  mysql_data:
+
+networks:
+  backend-net:
