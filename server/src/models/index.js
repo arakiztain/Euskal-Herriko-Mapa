@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/sequelize.js";
 import User from "./user.js";
 import Group from "./group.js";
 import Municipality from "./municipality.js";

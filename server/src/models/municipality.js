@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
+import sequelize from '../config/sequelize.js';
 
 const Municipality = sequelize.define('Municipality', {
   id: {

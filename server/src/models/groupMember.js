@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
+import sequelize from '../config/sequelize.js';
 
 const GroupMember = sequelize.define('GroupMember', {
   id: {

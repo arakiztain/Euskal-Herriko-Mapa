@@ -1,0 +1,43 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  server:
+    build: .
+    container_name: server
+    restart: unless-stopped
+    ports:
+      - "${PORT}:3000"
+    volumes:
+    - .:/app
+    - node_modules:/app/node_modules
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      PORT: ${PORT}
+    networks:
+      - backend-net
+
+volumes:
+  node_modules:
+  mysql_data:
+
+networks:
+  backend-net:
