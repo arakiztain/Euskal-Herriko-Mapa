@@ -17,7 +17,7 @@ services:
 
   server:
     build: .
-    container_name: server
+    container_name: mapa
     restart: unless-stopped
     ports:
       - "${PORT}:3000"

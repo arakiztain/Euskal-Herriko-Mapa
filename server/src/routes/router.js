@@ -10,7 +10,7 @@ router.get("/",(req,res)=>{
     res.send("mapa")
 })
 
-router.use("/", isLoggedInAPI, authRouter);
+router.use("/", authRouter);
 // router.use("/municipality", isLoggedInAPI, municipalityRouter);
 // router.use("/group", isLoggedInAPI, groupRouter);
 

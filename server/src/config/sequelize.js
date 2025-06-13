@@ -2,10 +2,7 @@ import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -13,9 +10,22 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: "mysql",
-    port: 3306,       // Puerto interno del contenedor
-    logging: false,  
+    port: 3306,
+    logging: false,
   }
 );
+
+const connectWithRetry = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Conexión exitosa a MySQL.");
+  } catch (err) {
+    console.error("❌ Error conectando a MySQL:", err.message);
+    console.log("🔁 Reintentando conexión en 5 segundos...");
+    setTimeout(connectWithRetry, 5000);
+  }
+};
+
+connectWithRetry();
 
 export default sequelize;
