@@ -3,27 +3,20 @@ import sequelize from '../config/sequelize.js';
 
 const Municipality = sequelize.define('Municipality', {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+    type: DataTypes.STRING(10),
+    primaryKey: true
   },
-  municipality: {           
+  name: {
     type: DataTypes.STRING(100),
-    allowNull: false,
+    allowNull: false
   },
-  province: {           
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  visitDate: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
+  province: { 
+    type: DataTypes.STRING(50),
+    allowNull: false 
   }
 }, {
-  tableName: 'user_visits',
+  tableName: 'municipalities',
   timestamps: true,
 });
-
 
 export default Municipality;
