@@ -3,12 +3,14 @@ import sequelize from '../config/sequelize.js';
 
 const Municipality = sequelize.define('Municipality', {
   id: {
-    type: DataTypes.STRING(10),
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true
   },
   name: {
     type: DataTypes.STRING(100),
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   province: { 
     type: DataTypes.STRING(50),
