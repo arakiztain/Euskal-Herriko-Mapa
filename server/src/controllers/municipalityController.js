@@ -10,6 +10,64 @@ async function getAllMunicipalities(req, res) {
   }
 }
 
+async function getUserMunicipalities(req, res) {
+  try {
+    const userId = req.user.id; // suponiendo que tienes autenticación y middleware que añade req.user
+    const userMunicipalities = await UserMunicipality.findAll({
+      where: { userId },
+      include: 'Municipality', // o puedes hacer un join para obtener info del municipio si quieres
+    });
+    res.json(userMunicipalities);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener municipios del usuario' });
+  }
+}
+
+async function addUserMunicipality(req, res) {
+  try {
+    const userId = req.user.id;
+    const { municipalityId } = req.body;
+
+    // Evitar duplicados (findOrCreate)
+    const [record, created] = await UserMunicipality.findOrCreate({
+      where: { userId, municipalityId }
+    });
+
+    if (!created) {
+      return res.status(409).json({ message: 'Municipio ya marcado como visitado' });
+    }
+
+    res.status(201).json(record);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al añadir municipio visitado' });
+  }
+}
+
+async function removeUserMunicipality(req, res) {
+  try {
+    const userId = req.user.id;
+    const { municipalityId } = req.params;
+
+    const deleted = await UserMunicipality.destroy({
+      where: { userId, municipalityId }
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'No encontrado' });
+    }
+
+    res.json({ message: 'Municipio desmarcado' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar municipio visitado' });
+  }
+}
+
 export default{
-    getAllMunicipalities 
+    getAllMunicipalities,
+    getUserMunicipalities,
+    addUserMunicipality,
+    removeUserMunicipality
 };
