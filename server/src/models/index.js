@@ -30,6 +30,11 @@ User.belongsToMany(Group, {
   otherKey: 'groupId'
 });
 
+UserMunicipality.belongsTo(Municipality, {
+  foreignKey: 'municipalityId', 
+  as: 'municipality' 
+});
+
 export {
   User,
   Municipality,

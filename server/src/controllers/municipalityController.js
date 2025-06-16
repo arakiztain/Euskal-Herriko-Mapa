@@ -1,4 +1,5 @@
 import Municipality from '../models/municipality.js';
+import UserMunicipality from '../models/userMunicipality.js';
 
 async function getAllMunicipalities(req, res) {
   try {
@@ -12,10 +13,13 @@ async function getAllMunicipalities(req, res) {
 
 async function getUserMunicipalities(req, res) {
   try {
-    const userId = req.user.id; // suponiendo que tienes autenticación y middleware que añade req.user
+    const userId = req.user.id;
     const userMunicipalities = await UserMunicipality.findAll({
       where: { userId },
-      include: 'Municipality', // o puedes hacer un join para obtener info del municipio si quieres
+      include: {
+        model: Municipality,
+        as: 'municipality'
+      }
     });
     res.json(userMunicipalities);
   } catch (error) {
@@ -27,7 +31,16 @@ async function getUserMunicipalities(req, res) {
 async function addUserMunicipality(req, res) {
   try {
     const userId = req.user.id;
-    const { municipalityId } = req.body;
+    const { municipalityName } = req.body;
+
+    // Buscar el municipio por nombre
+    const municipality = await Municipality.findOne({ where: { name: municipalityName } });
+    console.log(municipality);
+    if (!municipality) {
+      return res.status(404).json({ message: 'Municipio no encontrado' });
+    }
+
+    const municipalityId = municipality.id;
 
     // Evitar duplicados (findOrCreate)
     const [record, created] = await UserMunicipality.findOrCreate({
