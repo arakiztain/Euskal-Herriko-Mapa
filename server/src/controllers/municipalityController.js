@@ -14,13 +14,16 @@ async function getAllMunicipalities(req, res) {
 async function getUserMunicipalities(req, res) {
   try {
     const userId = req.user.id;
+    
     const userMunicipalities = await UserMunicipality.findAll({
       where: { userId },
       include: {
         model: Municipality,
-        as: 'municipality'
+        as: 'municipality',
+        attributes: ['id', 'name', 'province']
       }
     });
+
     res.json(userMunicipalities);
   } catch (error) {
     console.error(error);

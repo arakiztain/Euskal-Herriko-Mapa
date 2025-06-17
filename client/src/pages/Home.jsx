@@ -1,9 +1,17 @@
-import Map from '../components/Map'
+import { Link } from 'react-router-dom';
 
-export default function Home() {
+const Home = () => {
   return (
     <div>
-      <Map />
+      <h1>Bienvenido a la App</h1>
+      <Link to="/login">
+        <button>Login</button>
+      </Link>
+      <Link to="/register">
+        <button>Registro</button>
+      </Link>
     </div>
-  )
-}
+  );
+};
+
+export default Home;
