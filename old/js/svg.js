@@ -2,6 +2,18 @@ import { handleMapClick } from './clickMapa.js';
 import { normalizeText, provinceColors, suggestMunicipalities } from './utils.js';
 
 export async function loadMap() {
+
+    // // Primero, cargar colores guardados desde backend
+    // let savedColors = {};
+    // try {
+    //     const response = await fetch('/api/municipios/colors');
+    //     if (response.ok) {
+    //         savedColors = await response.json();
+    //     }
+    // } catch (error) {
+    //     console.error('Error cargando colores desde backend:', error);
+    // }
+
     fetch(`mapa.svg?timestamp=${new Date().getTime()}`)
         .then(response => response.text())
         .then(svg => {
