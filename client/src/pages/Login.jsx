@@ -1,23 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../utils/fetchServer';
-
+import { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const { onLogin } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = await loginUser(email, password);
-      localStorage.setItem('token', data.token);
+    const error = await onLogin(email, password);
+    if (error) {
+      alert(error);
+    } else {
       alert('Login correcto');
-      navigate('/');
-    } catch (error) {
-      console.error(error);
-      alert('Error al iniciar sesión');
     }
   };
 
@@ -27,7 +22,7 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
