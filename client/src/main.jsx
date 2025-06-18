@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import './global.css'; // o el CSS que uses
+import { MunicipalityProvider } from './context/MunicipalityContext';
+import './global.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <MunicipalityProvider>
+        <App />
+      </MunicipalityProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

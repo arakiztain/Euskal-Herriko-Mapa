@@ -16,14 +16,13 @@ const Register = () => {
       alert('Registro correcto');
       navigate('/');
     } catch (error) {
-      console.error(error);
       alert('Error al registrarse');
     }
   };
 
   return (
     <div>
-      <h2>Register</h2>
+      <h2>Registro</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

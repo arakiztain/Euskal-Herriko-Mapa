@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Municipality from '../models/municipality.js';
 import UserMunicipality from '../models/userMunicipality.js';
 
@@ -24,7 +25,13 @@ async function getUserMunicipalities(req, res) {
       }
     });
 
-    res.json(userMunicipalities);
+    const result = userMunicipalities.map(item => ({
+      name: item.municipality.name,
+      province: item.municipality.province
+    }));
+
+
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener municipios del usuario' });
@@ -35,10 +42,9 @@ async function addUserMunicipality(req, res) {
   try {
     const userId = req.user.id;
     const { municipalityName } = req.body;
-
-    // Buscar el municipio por nombre
+ 
     const municipality = await Municipality.findOne({ where: { name: municipalityName } });
-    console.log(municipality);
+    
     if (!municipality) {
       return res.status(404).json({ message: 'Municipio no encontrado' });
     }
@@ -60,6 +66,23 @@ async function addUserMunicipality(req, res) {
     res.status(500).json({ error: 'Error al añadir municipio visitado' });
   }
 }
+
+const searchMunicipalities = async (req, res) => {
+  const { name } = req.query;
+  try {
+    const municipalities = await Municipality.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,  // Uso LIKE en vez de ILIKE
+        },
+      },
+      order: [['province', 'ASC'], ['name', 'ASC']],
+    });
+    res.json(municipalities);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 async function removeUserMunicipality(req, res) {
   try {
@@ -85,5 +108,6 @@ export default{
     getAllMunicipalities,
     getUserMunicipalities,
     addUserMunicipality,
+    searchMunicipalities,
     removeUserMunicipality
 };

@@ -13,16 +13,23 @@ export const loginUser = async (email, password) => {
 export const getUserMunicipalities = async () => {
   try {
     const res = await api.get('/municipality/user');
+
     return res.data;
   } catch (error) {
     console.error('Error fetching municipalities:', error);
-    throw error; // o devuelve un valor por defecto si quieres
+    throw error;
   }
 };
 
-export const addUserMunicipality = async (municipalityId) => {
-  const res = await api.post('/municipality', { municipalityId });
+export const addUserMunicipality = async (municipalityName) => {
+  const res = await api.post('/municipality', { municipalityName });
   return res.data;
+};
+
+
+export const searchMunicipalitiesByName = async (name) => {
+  const res = await api.get(`/municipality/search?name=${encodeURIComponent(name)}`);
+  return res.data; // [{ id, name, province }, ...]
 };
 
 export const removeUserMunicipality = async (municipalityId) => {
