@@ -1,0 +1,81 @@
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #0f0f0f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  background-color: #141414;
+  border-bottom: 2px solid #333;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.right {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.link:hover {
+  color: #00bcd4;
+}
+
+/* CONTENIDO PRINCIPAL: SIDEBAR + MAPA */
+.container {
+  display: flex;
+  flex: 1; /* que ocupe el resto del alto */
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 320px;
+  border-right: 2px solid #333;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #181818;
+}
+
+.mapContainer {
+  flex: 1;
+  background-color: #0a0a0a;
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
