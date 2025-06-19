@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMunicipalities } from '../context/MunicipalityContext';
 import { provinceColors } from '../utils/provinceColors';
 import { addUserMunicipality } from '../utils/fetchServer';
+import { removeUserMunicipality } from '../utils/fetchServer';
 
 export function SVG() {
   const { municipalities, fetchMunicipalities } = useMunicipalities();
@@ -24,17 +25,32 @@ export function SVG() {
     const container = document.getElementById('mapa-container');
     container.innerHTML = svgContent;
 
-    // Añadir evento de click a cada path (municipio)
+    //Click event
     const paths = container.querySelectorAll('path');
-    paths.forEach(path => {
-      path.style.cursor = 'pointer';
-      path.addEventListener('click', () => {
-        const name = path.getAttribute('id');
 
-        const confirmAdd = prompt(`¿Quieres añadir "${name}"?`);
-        if (confirmAdd) {
-          handleAddMunicipality(name);
+    paths.forEach(path => {
+      const name = path.getAttribute('id');
+      if (name.includes('path')) return;
+
+      path.style.cursor = 'pointer';
+      path.addEventListener('click', async() => {
+
+      const currentFill = path.style.fill;
+      const isSelected = currentFill !== 'rgb(255, 234, 191)';
+
+      if (isSelected) {
+        const confirmRemove = confirm(`"${name}" kendu gure dozu?`);
+        if (confirmRemove) {
+          await handleRemoveMunicipality(name);
+          await fetchMunicipalities();
         }
+      } else {
+        const confirmAdd = prompt(`"${name}" gehitu gure dozu?`);
+        if (confirmAdd) {
+          await handleAddMunicipality(name);
+          await fetchMunicipalities();
+        }
+      }
       });
     });
 
@@ -50,13 +66,21 @@ export function SVG() {
 
   const handleAddMunicipality = async (municipalityName) => {
     try {
-      console.log('municipalityName', municipalityName);
       await addUserMunicipality(municipalityName);
       await fetchMunicipalities();
     } catch (error) {
       console.error('Error añadiendo municipio:', error);
     }
   };
+
+  const handleRemoveMunicipality = async (municipalityName) => {
+  try {
+    await removeUserMunicipality(municipalityName);
+    await fetchMunicipalities();
+  } catch (error) {
+    console.error('Error quitando municipio:', error);
+  }
+};
 
   return <div id="mapa-container" />;
 }

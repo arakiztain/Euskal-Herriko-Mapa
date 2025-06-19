@@ -9,7 +9,7 @@ export function MunicipalityProvider({ children }) {
   const fetchMunicipalities = useCallback(async () => {
     try {
       const data = await getUserMunicipalities();
-      console.log('Municipios del usuario:', data);
+
       setMunicipalities(data);
     } catch (error) {
       console.error('Error fetching municipalities:', error);

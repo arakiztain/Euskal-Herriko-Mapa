@@ -87,14 +87,25 @@ const searchMunicipalities = async (req, res) => {
 async function removeUserMunicipality(req, res) {
   try {
     const userId = req.user.id;
-    const { municipalityId } = req.params;
+    const { municipalityName } = req.params;
+    console.log(municipalityName);
+    const municipality = await Municipality.findOne({
+      where: { name: municipalityName }
+    });
+    console.log(municipality);
+    if (!municipality) {
+      return res.status(404).json({ message: 'Municipio no encontrado' });
+    }
 
     const deleted = await UserMunicipality.destroy({
-      where: { userId, municipalityId }
+      where: {
+        userId,
+        municipalityId: municipality.id
+      }
     });
 
     if (!deleted) {
-      return res.status(404).json({ message: 'No encontrado' });
+      return res.status(404).json({ message: 'No encontrado en UserMunicipality' });
     }
 
     res.json({ message: 'Municipio desmarcado' });
