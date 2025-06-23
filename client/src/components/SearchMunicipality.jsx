@@ -29,17 +29,17 @@ export function SearchMunicipality() {
     <div>
       <input
         type="text"
-        placeholder="Buscar municipio..."
+        placeholder="Udalerria bilatu.."
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
-      <button onClick={handleSearch}>Buscar</button>
+      <button onClick={handleSearch}>Bilatu</button>
 
       <ul>
         {results.map(m => (
           <li key={m.id}>
             {m.name} ({m.province})
-            <button onClick={() => handleAdd(m.name)}>Añadir</button>
+            <button onClick={() => handleAdd(m.name)}>Gehitu</button>
           </li>
         ))}
       </ul>

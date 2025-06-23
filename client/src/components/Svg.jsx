@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMunicipalities } from '../context/MunicipalityContext';
 import { provinceColors } from '../utils/provinceColors';
-import { addUserMunicipality } from '../utils/fetchServer';
+import { addUserMunicipality, removeUserMunicipality } from '../utils/fetchServer';
 
 export function SVG() {
   const { municipalities, fetchMunicipalities } = useMunicipalities();
@@ -24,21 +24,35 @@ export function SVG() {
     const container = document.getElementById('mapa-container');
     container.innerHTML = svgContent;
 
-    // Añadir evento de click a cada path (municipio)
     const paths = container.querySelectorAll('path');
-    paths.forEach(path => {
-      path.style.cursor = 'pointer';
-      path.addEventListener('click', () => {
-        const name = path.getAttribute('id');
 
-        const confirmAdd = prompt(`¿Quieres añadir "${name}"?`);
-        if (confirmAdd) {
-          handleAddMunicipality(name);
+    paths.forEach(path => {
+      const name = path.getAttribute('id');
+      if (!name || name.includes('path')) return;
+
+      path.style.cursor = 'pointer';
+
+      path.addEventListener('click', async () => {
+        // Comprueba si el municipio está seleccionado en el estado
+        const isSelected = municipalities.some(m => m.name === name);
+
+        if (isSelected) {
+          const confirmRemove = confirm(`"${name}" kendu gure dozu?`);
+          if (confirmRemove) {
+            await handleRemoveMunicipality(name);
+            await fetchMunicipalities();
+          }
+        } else {
+          const confirmAdd = prompt(`"${name}" gehitu gure dozu? (Bai idatzi mesedez)`);
+          if (confirmAdd && confirmAdd.toLowerCase() === 'bai') {
+            await handleAddMunicipality(name);
+            await fetchMunicipalities();
+          }
         }
       });
     });
 
-    //Margoztu
+    // Pintamos los municipios seleccionados según la base de datos
     municipalities.forEach(({ name, province }) => {
       if (!name || !province) return;
       const color = provinceColors[province] || '#CCC';
@@ -50,11 +64,19 @@ export function SVG() {
 
   const handleAddMunicipality = async (municipalityName) => {
     try {
-      console.log('municipalityName', municipalityName);
       await addUserMunicipality(municipalityName);
       await fetchMunicipalities();
     } catch (error) {
       console.error('Error añadiendo municipio:', error);
+    }
+  };
+
+  const handleRemoveMunicipality = async (municipalityName) => {
+    try {
+      await removeUserMunicipality(municipalityName);
+      await fetchMunicipalities();
+    } catch (error) {
+      console.error('Error quitando municipio:', error);
     }
   };
 

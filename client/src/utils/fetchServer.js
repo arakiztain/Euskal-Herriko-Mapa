@@ -32,7 +32,7 @@ export const searchMunicipalitiesByName = async (name) => {
   return res.data; // [{ id, name, province }, ...]
 };
 
-export const removeUserMunicipality = async (municipalityId) => {
-  const res = await api.delete(`/municipality/${municipalityId}`);
+export const removeUserMunicipality = async (municipalityName) => {
+  const res = await api.delete(`/municipality/${municipalityName}`);
   return res.data;
 };
