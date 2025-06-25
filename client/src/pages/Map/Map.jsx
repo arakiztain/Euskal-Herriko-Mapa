@@ -1,6 +1,6 @@
 import styles from "./Map.module.css";
 import { SearchMunicipality } from "../../components/SearchMunicipality";
-import { SelectedMunicipalities } from "../../components/SelectedMunicipalities";
+import { SelectedMunicipalities } from "../../components/SelectedMunicipalities/SelectedMunicipalities";
 import { SVG } from "../../components/Svg";
 
 export default function MapPage() {
