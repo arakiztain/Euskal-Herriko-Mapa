@@ -10,6 +10,9 @@ const Home = () => {
       <Link to="/register">
         <button>Registro</button>
       </Link>
+      <Link to="/map">
+        <button>Mapa</button>
+      </Link>
     </div>
   );
 };

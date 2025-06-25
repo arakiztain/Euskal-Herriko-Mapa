@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useMunicipalities } from '../context/MunicipalityContext';
 import { provinceColors } from '../utils/provinceColors';
 import { addUserMunicipality, removeUserMunicipality } from '../utils/fetchServer';
+import Modal from '../components/Modal'; // Asegúrate de que la ruta sea correcta
 
 export function SVG() {
   const { municipalities, fetchMunicipalities } = useMunicipalities();
   const [svgContent, setSvgContent] = useState('');
+  const [modal, setModal] = useState({ show: false, action: null, name: '' });
 
   useEffect(() => {
     const fetchSVG = async () => {
@@ -24,6 +26,16 @@ export function SVG() {
     const container = document.getElementById('mapa-container');
     container.innerHTML = svgContent;
 
+    const svg = container.querySelector('svg');
+    if (svg) {
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', 'auto');
+      svg.style.maxWidth = '1000px';
+      svg.style.display = 'block';
+    }
+
     const paths = container.querySelectorAll('path');
 
     paths.forEach(path => {
@@ -32,53 +44,61 @@ export function SVG() {
 
       path.style.cursor = 'pointer';
 
-      path.addEventListener('click', async () => {
-        // Comprueba si el municipio está seleccionado en el estado
+      path.addEventListener('click', () => {
         const isSelected = municipalities.some(m => m.name === name);
-
-        if (isSelected) {
-          const confirmRemove = confirm(`"${name}" kendu gure dozu?`);
-          if (confirmRemove) {
-            await handleRemoveMunicipality(name);
-            await fetchMunicipalities();
-          }
-        } else {
-          const confirmAdd = prompt(`"${name}" gehitu gure dozu? (Bai idatzi mesedez)`);
-          if (confirmAdd && confirmAdd.toLowerCase() === 'bai') {
-            await handleAddMunicipality(name);
-            await fetchMunicipalities();
-          }
-        }
+        setModal({ show: true, action: isSelected ? 'remove' : 'add', name });
       });
     });
 
-    // Pintamos los municipios seleccionados según la base de datos
     municipalities.forEach(({ name, province }) => {
-      if (!name || !province) return;
       const color = provinceColors[province] || '#CCC';
-
       const pathsToColor = container.querySelectorAll(`path[id="${name}"]`);
       pathsToColor.forEach(path => (path.style.fill = color));
     });
   }, [svgContent, municipalities]);
 
-  const handleAddMunicipality = async (municipalityName) => {
-    try {
-      await addUserMunicipality(municipalityName);
-      await fetchMunicipalities();
-    } catch (error) {
-      console.error('Error añadiendo municipio:', error);
-    }
+  const handleAddMunicipality = async (name) => {
+    await addUserMunicipality(name);
+    await fetchMunicipalities();
   };
 
-  const handleRemoveMunicipality = async (municipalityName) => {
-    try {
-      await removeUserMunicipality(municipalityName);
-      await fetchMunicipalities();
-    } catch (error) {
-      console.error('Error quitando municipio:', error);
-    }
+  const handleRemoveMunicipality = async (name) => {
+    await removeUserMunicipality(name);
+    await fetchMunicipalities();
   };
 
-  return <div id="mapa-container" />;
+  const handleModalConfirm = async () => {
+    if (modal.action === 'add') await handleAddMunicipality(modal.name);
+    else if (modal.action === 'remove') await handleRemoveMunicipality(modal.name);
+    setModal({ show: false, action: null, name: '' });
+  };
+
+  const handleModalCancel = () => {
+    setModal({ show: false, action: null, name: '' });
+  };
+
+  return (
+    <>
+      <div
+        id="mapa-container"
+        style={{
+          width: '100%',
+          minHeight: '100vh',
+          background: 'black',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '1rem'
+        }}
+      />
+      
+      {modal.show && (
+        <Modal
+          message={`"${modal.name}" ${modal.action === 'add' ? 'gehitu' : 'kendu'} gure dozu?`}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
+    </>
+  );
 }
