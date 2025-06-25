@@ -31,7 +31,7 @@ export function SVG() {
       svg.removeAttribute('width');
       svg.removeAttribute('height');
       svg.setAttribute('width', '100%');
-      svg.setAttribute('height', 'auto');
+      svg.setAttribute('height', '100%');
       svg.style.maxWidth = '1000px';
       svg.style.display = 'block';
     }
@@ -91,7 +91,7 @@ export function SVG() {
           padding: '1rem'
         }}
       />
-      
+
       {modal.show && (
         <Modal
           message={`"${modal.name}" ${modal.action === 'add' ? 'gehitu' : 'kendu'} gure dozu?`}

@@ -1,0 +1,70 @@
+.container {
+  background-color: #a5a2b4;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: #374151;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #d1d5db;
+  border-radius: 6px;
+  height: 12px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.bg-red {
+  background-color: #ef4444;
+}
+.bg-yellow {
+  background-color: #facc15;
+}
+.bg-green {
+  background-color: #22c55e;
+}
+
+.municipality-list {
+  font-size: 0.875rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.municipality-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.remove-button {
+  color: #ef4444;
+  font-size: 0.75rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.remove-button:hover {
+  text-decoration: underline;
+}
