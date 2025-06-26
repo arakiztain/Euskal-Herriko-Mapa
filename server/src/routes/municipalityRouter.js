@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", municipalityController.getAllMunicipalities);
 router.get("/user", municipalityController.getUserMunicipalities);
+router.get("/counts", municipalityController.getMunicipalityCountsByProvince);
 router.post("/", municipalityController.addUserMunicipality);
 router.get("/search", municipalityController.searchMunicipalities);
 router.delete("/:municipalityName", municipalityController.removeUserMunicipality);
