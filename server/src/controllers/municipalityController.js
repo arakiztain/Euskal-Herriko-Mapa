@@ -1,3 +1,4 @@
+import sequelize from '../config/sequelize.js';
 import { Op } from 'sequelize';
 import Municipality from '../models/municipality.js';
 import UserMunicipality from '../models/userMunicipality.js';
@@ -35,6 +36,28 @@ async function getUserMunicipalities(req, res) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener municipios del usuario' });
+  }
+}
+
+async function getMunicipalityCountsByProvince(req, res) {
+  try {
+    const counts = await Municipality.findAll({
+      attributes: [
+        'province',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'total']
+      ],
+      group: ['province']
+    });
+
+    const result = {};
+    counts.forEach(row => {
+      result[row.province] = parseInt(row.get('total'), 10);
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los conteos por provincia' });
   }
 }
 
@@ -118,6 +141,7 @@ async function removeUserMunicipality(req, res) {
 export default{
     getAllMunicipalities,
     getUserMunicipalities,
+    getMunicipalityCountsByProvince,
     addUserMunicipality,
     searchMunicipalities,
     removeUserMunicipality

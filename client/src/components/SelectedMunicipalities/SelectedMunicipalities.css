@@ -1,9 +1,8 @@
 .container {
-  background-color: #a5a2b4;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
+  max-width: 600px; /* límite razonable para pantallas grandes */
+  margin: 0 auto;
 }
 
 .title {
@@ -15,7 +14,7 @@
 .subtitle {
   font-weight: bold;
   margin-bottom: 0.25rem;
-  color: #374151;
+  color: #ffffff;
 }
 
 .progress-container {
@@ -67,4 +66,88 @@
 
 .remove-button:hover {
   text-decoration: underline;
+}
+.custom-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: rgb(94, 8, 8);
+}
+
+/* Opcional: mejora tus estilos de botón quitar para lista normal */
+.remove-button {
+  margin-left: 10px;
+  background-color: rgb(85, 23, 23);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 3px 7px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.3s ease;
+}
+
+.remove-button:hover {
+  background-color: #900;
+}
+
+/* Añade si ves que necesitas algo más de estilo */
+.custom-option {
+  padding: 6px 10px;
+  font-size: 0.875rem;
+  color: #e0e0e0;
+}
+
+.custom-option:hover {
+  background-color: #025c6e;
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .municipality-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .remove-button {
+    font-size: 0.75rem;
+    padding: 2px 5px;
+  }
+
+  .custom-option {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-container {
+    height: 10px;
+  }
+
+  .progress-bar {
+    border-radius: 4px;
+  }
 }
