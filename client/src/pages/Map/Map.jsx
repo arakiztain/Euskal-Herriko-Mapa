@@ -2,14 +2,15 @@ import styles from "./Map.module.css";
 import { SearchMunicipality } from "../../components/SearchMunicipality";
 import { SelectedMunicipalities } from "../../components/SelectedMunicipalities/SelectedMunicipalities";
 import { SVG } from "../../components/Svg";
+import logo from '../../assets/images/logo.png';
 
 export default function MapPage() {
   return (
     <div className={styles.page}>
       <nav className={styles.navbar}>
         <div className={styles.left}>
-          <img src="../../assets/images/logo.png" alt="Logo" className={styles.logo} />
-          <h1 className={styles.title}>Euskal Herriko Mapa</h1>
+          <img src={logo} alt="Logo" className={styles.logo} />
+          <h1 className={styles.title}>Euskal Erriko Mapa <class>*</class></h1>
         </div>
 
         <div className={styles.center}>

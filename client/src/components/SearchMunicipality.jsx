@@ -25,24 +25,28 @@ export function SearchMunicipality() {
     }
   };
 
-  return (
-    <div>
+return (
+  <div>
+    <div className="searchContainer">
       <input
         type="text"
         placeholder="Udalerria bilatu.."
         value={search}
         onChange={e => setSearch(e.target.value)}
       />
+      &nbsp;
       <button onClick={handleSearch}>Bilatu</button>
-
-      <ul>
-        {results.map(m => (
-          <li key={m.id}>
-            {m.name} ({m.province})
-            <button onClick={() => handleAdd(m.name)}>Gehitu</button>
-          </li>
-        ))}
-      </ul>
     </div>
-  );
+
+    <ul>
+      {results.map(m => (
+        <li key={m.id}>
+          {m.name} ({m.province})
+          <button onClick={() => handleAdd(m.name)}>Gehitu</button>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 }
