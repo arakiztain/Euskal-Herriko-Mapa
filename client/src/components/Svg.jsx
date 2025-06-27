@@ -84,7 +84,6 @@ export function SVG() {
         style={{
           width: '100%',
           minHeight: '100vh',
-          background: 'black',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',

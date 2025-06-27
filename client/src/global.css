@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Vasca';
+  src: url('./fonts/Vascan.TTF') format('truetype');
+}
+
+body {
+  font-family: 'Vasca', sans-serif !important;
+  margin:0;
+}

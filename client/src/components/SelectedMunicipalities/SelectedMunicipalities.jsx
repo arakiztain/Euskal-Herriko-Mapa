@@ -233,7 +233,7 @@ const customStyles = {
                     className="remove-button"
                     title={`Eliminar ${name}`}
                   >
-                    Kendu
+                    ❌
                   </button>
                 </li>
               ))}
