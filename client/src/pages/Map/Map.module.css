@@ -1,12 +1,19 @@
 .title {
   font-size: 2rem;
-  color: #ffffff; /* un toque azul para destacar */
+  color: #ffffff;
   user-select: none;
+  line-height: 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
-class{
+
+.titleIcon {
   color: white;
-  filter: drop-shadow(0 0 3px #a3bdc0);
+  margin-left: 0.6rem;
+  font-size: 2.5rem;
 }
+
 a {
   font-size: 1.3rem;
 }
@@ -43,14 +50,15 @@ a {
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  filter: drop-shadow(0 0 3px #a3bdc0);
 }
 
 .center {
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: center; /* ✅ Alinea verticalmente con el h1 */
   padding: 0 1rem;
+  transform: translateY(8px); /* Baja 2 píxeles. Ajusta si quieres más o menos */
 }
 
 .right {
@@ -77,7 +85,7 @@ a {
 /* CONTENIDO PRINCIPAL: SIDEBAR + MAPA */
 .container {
   display: flex;
-  flex: 1; /* que ocupe el resto del alto */
+  flex: 1;
   overflow: hidden;
   background-color: #121212;
   border-radius: 0 0 12px 12px;
@@ -112,24 +120,21 @@ a {
   box-shadow: inset 0 0 50px #000000cc;
 }
 
-/* Capa negra semitransparente encima para oscurecer */
 .mapContainer::before {
   content: "";
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 0; /* Debajo del contenido */
+  z-index: 0;
   border-radius: 0 12px 12px 0;
 }
 
-/* Aseguramos que el contenido esté por encima */
 .mapContainer > * {
   position: relative;
   z-index: 1;
-  background: transparent; /* que no tenga fondo */
+  background: transparent;
 }
 
-/* Opcional: sombra y ligera animación al SVG para que destaque */
 .mapContainer > svg {
   max-width: 90%;
   max-height: 90%;
@@ -141,7 +146,6 @@ a {
   transform: scale(1.03);
 }
 
-/* Si tu buscador usa input text dentro de .center, mejora así */
 .center input[type="text"] {
   width: 320px;
   padding: 0.5rem 1rem;
@@ -151,7 +155,7 @@ a {
   font-size: 1rem;
   background-color: #2c2c2c;
   color: #eee;
-  box-shadow: 0 0 12px rgb(0 188 212 / 0.6);
+  box-shadow: 0 0 12px #a3bdc0;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -162,7 +166,9 @@ a {
   caret-color: #121212;
   font-weight: 600;
 }
+
 button {
+  /* sin sombra por defecto */
   background-color: #a3bdc0;
   color: #121212;
   border: none;
@@ -171,24 +177,17 @@ button {
   font-weight: 600;
   border-radius: 25px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 188, 212, 0.4);
   transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
   user-select: none;
 }
 
-button:hover {
+/* Solo si tiene clase .highlighted */
+button.highlighted {
+  box-shadow: 0 4px 8px rgba(0, 188, 212, 0.4);
+}
+
+button.highlighted:hover {
   background-color: #0097a7;
   box-shadow: 0 6px 14px rgba(0, 151, 167, 0.7);
   transform: scale(1.05);
 }
-
-button:active {
-  transform: scale(0.95);
-
-}
-
-button:focus {
-  outline: 2px solid #00bcd4;
-  outline-offset: 3px;
-}
-
