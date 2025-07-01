@@ -1,41 +1,64 @@
+import { useEffect, useState } from "react";
 import styles from "./Map.module.css";
-import { SearchMunicipality } from "../../components/SearchMunicipality";
+import { Navbar } from "../../components/Navbar/Navbar";
 import { SelectedMunicipalities } from "../../components/SelectedMunicipalities/SelectedMunicipalities";
 import { SVG } from "../../components/Svg";
-import logo from '../../assets/images/logo.png';
+import { LoginModal } from "../../components/LoginModal/LoginModal";
+import { RegisterModal } from "../../components/RegisterModal/RegisterModal";
 
 export default function MapPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setShowLogin(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    setIsAuthenticated(true);
+    setShowRegister(false);
+  };
+
+  const backdropActive = showLogin || showRegister;
+
   return (
     <div className={styles.page}>
-      <nav className={styles.navbar}>
-        <div className={styles.left}>
-          <img src={logo} alt="Logo" className={styles.logo} />
-          <h1 className={styles.title}>
-            Euskal Herriko Mapa <span className={styles.titleIcon}>*</span>
-          </h1>
-        </div>
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        onLoginClick={() => setShowLogin(true)}
+        onRegisterClick={() => setShowRegister(true)}
+      />
 
-        <div className={styles.center}>
-          <SearchMunicipality />
-        </div>
-
-        <div className={styles.right}>
-          <a href="/" className={styles.link}>Home</a>
-          <a href="/map" className={styles.link}>Mapa</a>
-          <a href="/argibidea" className={styles.link}>Argibidea</a>
-          <a href="/profile" className={styles.link}>Nire profila</a>
-        </div>
-      </nav>
-
-      <div className={styles.container}>
+      <div className={`${styles.container} ${backdropActive ? styles.blurBackground : ""}`}>
         <aside className={styles.sidebar}>
-          <SelectedMunicipalities />
+          <SelectedMunicipalities isAuthenticated={isAuthenticated} />
         </aside>
 
         <main className={styles.mapContainer}>
           <SVG />
         </main>
       </div>
+
+      {showLogin && (
+        <LoginModal
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
+
+      {showRegister && (
+        <RegisterModal
+          onClose={() => setShowRegister(false)}
+          onRegisterSuccess={handleRegisterSuccess}
+        />
+      )}
     </div>
   );
 }
