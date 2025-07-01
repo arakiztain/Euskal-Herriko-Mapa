@@ -13,7 +13,6 @@ const AuthProvider = ({ children }) => {
       const result = await loginUser(email, password);
       localStorage.setItem("token", result.token);
       setUserData({ user: result.user, token: result.token, email });
-      navigate("/");
       return null;
     } catch (error) {
       return error.message || "Error al iniciar sesión";

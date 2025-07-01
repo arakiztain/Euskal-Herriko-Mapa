@@ -1,21 +1,63 @@
+import { useEffect, useState } from "react";
 import styles from "./Home.module.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Navbar } from "../../components/Navbar/Navbar";
+import { Footer } from "../../components/Footer/Footer";
+import { LoginModal } from "../../components/LoginModal/LoginModal";
+import { RegisterModal } from "../../components/RegisterModal/RegisterModal";
 
 export default function Home() {
-  const hasMunicipalities = false;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setShowLogin(false);
+  };
+
+  // Fondo difuminado cuando modal está abierto
+  const backdropActive = showLogin || showRegister;
 
   return (
     <div className={styles.pageWrapper}>
-      <Navbar hasMunicipalities={hasMunicipalities} />
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        onLoginClick={() => setShowLogin(true)}
+        onRegisterClick={() => setShowRegister(true)}
+      />
 
-      <main>
+      {/* Modales */}
+      {showLogin && (
+        <LoginModal
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
+      {showRegister && (
+        <RegisterModal
+          onClose={() => setShowRegister(false)}
+          onRegisterSuccess={() => {
+            setIsAuthenticated(true);
+            setShowRegister(false);
+          }}
+        />
+      )}
+
+      {/* Si hay modal abierto, añade clase para fondo oscuro y difuminado */}
+      <main className={`${styles.main} ${backdropActive ? styles.mainBlur : ""}`}>
         <div className={styles.hero}>
           <div className={styles.heroContent}>
             <h1>Ongi Etorri Euskal Herriko Mapa Interaktibora</h1>
             <p>Aztertu udalerriak eta eskuratu bakoitzaren informazio zehatza klik egitean.</p>
-            <Link to="/map" className={styles.btnPrimary}>Mapa ikusi</Link>
-
+            <Link to="/map" className={styles.btnPrimary}>
+              Mapa ikusi
+            </Link>
           </div>
         </div>
 
@@ -35,9 +77,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer>
-        <p>&copy; 2025 EH-ko mapa. Eskubide guztiak erreserbatuta.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

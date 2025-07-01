@@ -16,6 +16,10 @@ main {
   flex-direction: column;
 }
 
+p{
+    font-family: 'Inter', sans-serif;
+}
+
 .hero {
   position: relative;
   color: #fff;
@@ -120,6 +124,12 @@ footer {
   z-index: 10; 
 }
 
+.mainBlur {
+  filter: blur(3px);
+  pointer-events: none; /* Opcional para evitar clicks mientras modal abierto */
+  user-select: none;
+  transition: filter 0.3s ease;
+}
 
 @media (max-width: 768px) {
   .features {

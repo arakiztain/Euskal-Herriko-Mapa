@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMunicipalities } from '../context/MunicipalityContext';
 import { provinceColors } from '../utils/provinceColors';
 import { addUserMunicipality, removeUserMunicipality } from '../utils/fetchServer';
-import Modal from '../components/Modal'; // Asegúrate de que la ruta sea correcta
+import Modal from './ModalConfirmation/ModalConfirmation'; // Asegúrate de que la ruta sea correcta
 
 export function SVG() {
   const { municipalities, fetchMunicipalities } = useMunicipalities();
