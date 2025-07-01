@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  min-height: calc(100vh - 300px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero::before {
+  content: '';
+  background-image: url('../../assets/images/euskal herria.webp');
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  filter: blur(5px);
+  z-index: -2;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.heroContent p {
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+
+.btnPrimary {
+  background-color: #f5a623;
+  padding: 15px 30px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.btnPrimary:hover {
+  background-color: #d78a1c;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.features {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 30px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  max-width: 1100px;
+  margin: -150px auto 80px auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+.feature {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 16px;
+  color: #666;
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+footer {
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 30px 0;
+  margin-top: auto;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10; 
+}
+
+
+@media (max-width: 768px) {
+  .features {
+    grid-template-columns: 1fr;
+    margin: -100px auto 80px auto;
+  }
+  
+  .heroContent h1 {
+    font-size: 36px;
+  }
+  
+  .heroContent p {
+    font-size: 18px;
+  }
+  
+  .logoImage,
+  .logo {
+    display: none;
+  }
+}

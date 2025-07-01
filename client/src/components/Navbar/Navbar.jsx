@@ -1,16 +1,23 @@
 import styles from "./Navbar.module.css";
+import logo from "../../assets/images/logo.png";
+import { SearchMunicipality } from "../SearchMunicipality";
 
-export function Navbar() {
+export function Navbar({ showSearch = false }) {
   return (
     <nav className={styles.navbar}>
       <div className={styles.left}>
-        <img src="/logo.png" alt="Logo" className={styles.logo} />
-        <h1 className={styles.title}>Euskal Herriko Mapa</h1>
+        <img src={logo} alt="Logo" className={styles.logo} />
+        <h1 className={styles.title}>
+          Euskal Herriko Mapa <span className={styles.titleIcon}>*</span>
+        </h1>
       </div>
 
       <div className={styles.center}>
-        {/* Aquí ponemos el buscador */}
-        {/* Si quieres, puedes reutilizar SearchMunicipality */}
+        {showSearch ? (
+          <SearchMunicipality />
+        ) : (
+          <div className={styles.searchPlaceholder}></div>
+        )}
       </div>
 
       <div className={styles.right}>
@@ -22,3 +29,4 @@ export function Navbar() {
     </nav>
   );
 }
+
