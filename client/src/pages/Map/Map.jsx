@@ -10,7 +10,9 @@ export default function MapPage() {
       <nav className={styles.navbar}>
         <div className={styles.left}>
           <img src={logo} alt="Logo" className={styles.logo} />
-          <h1 className={styles.title}>Euskal Erriko Mapa <class>*</class></h1>
+          <h1 className={styles.title}>
+            Euskal Herriko Mapa <span className={styles.titleIcon}>*</span>
+          </h1>
         </div>
 
         <div className={styles.center}>

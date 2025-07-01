@@ -35,7 +35,7 @@ return (
         onChange={e => setSearch(e.target.value)}
       />
       &nbsp;
-      <button onClick={handleSearch}>Bilatu</button>
+      <button className="highlighted" onClick={handleSearch}>Bilatu</button>
     </div>
 
     <ul>
