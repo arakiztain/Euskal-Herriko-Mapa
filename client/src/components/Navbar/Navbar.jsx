@@ -67,17 +67,17 @@ export function Navbar({ showSearch = false, isAuthenticated = false, onLoginCli
               <div className={styles.userDropdown}>
                 <a href="/profile" className={styles.link}>Neure Profila</a>
                 <a
-  href="#"
-  className={styles.link}
-  onClick={e => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    setUserMenuOpen(false);
-    window.location.href = "/";
-  }}
->
-  Itxi saioa
-</a>
+                  href="#"
+                  className={styles.link}
+                  onClick={e => {
+                    e.preventDefault();
+                    localStorage.removeItem("token");
+                    setUserMenuOpen(false);
+                    window.location.href = "/";
+                  }}
+                >
+                Itxi saioa
+              </a>
               </div>
             )}
           </div>

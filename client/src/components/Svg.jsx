@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { useMunicipalities } from '../context/MunicipalityContext';
 import { provinceColors } from '../utils/provinceColors';
 import { addUserMunicipality, removeUserMunicipality } from '../utils/fetchServer';
-import Modal from './ModalConfirmation/ModalConfirmation'; // Asegúrate de que la ruta sea correcta
+import Modal from './ModalConfirmation/ModalConfirmation';
+import Toast from './Toast/Toast';
 
 export function SVG() {
   const { municipalities, fetchMunicipalities } = useMunicipalities();
   const [svgContent, setSvgContent] = useState('');
   const [modal, setModal] = useState({ show: false, action: null, name: '' });
+  const [toast, setToast] = useState(null);
+  const [pendingToast, setPendingToast] = useState(null);
 
   useEffect(() => {
     const fetchSVG = async () => {
@@ -57,6 +60,23 @@ export function SVG() {
     });
   }, [svgContent, municipalities]);
 
+  useEffect(() => {
+    if (!pendingToast) return;
+
+    const { action, name } = pendingToast;
+    const municipality = municipalities.find(m => m.name === name);
+    const province = municipality?.province || '';
+
+    setToast({
+      message: action === 'add'
+        ? `"${name}" gehitu da!`
+        : `"${name}" kendu da.`,
+      province
+    });
+
+    setPendingToast(null);
+  }, [municipalities, pendingToast]);
+
   const handleAddMunicipality = async (name) => {
     await addUserMunicipality(name);
     await fetchMunicipalities();
@@ -68,9 +88,15 @@ export function SVG() {
   };
 
   const handleModalConfirm = async () => {
-    if (modal.action === 'add') await handleAddMunicipality(modal.name);
-    else if (modal.action === 'remove') await handleRemoveMunicipality(modal.name);
     setModal({ show: false, action: null, name: '' });
+
+    if (modal.action === 'add') {
+      await handleAddMunicipality(modal.name);
+    } else if (modal.action === 'remove') {
+      await handleRemoveMunicipality(modal.name);
+    }
+
+    setPendingToast({ action: modal.action, name: modal.name });
   };
 
   const handleModalCancel = () => {
@@ -96,6 +122,15 @@ export function SVG() {
           message={`"${modal.name}" ${modal.action === 'add' ? 'gehitu' : 'kendu'} gure dozu?`}
           onConfirm={handleModalConfirm}
           onCancel={handleModalCancel}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          province={toast.province}
+          duration={3000}
+          onClose={() => setToast(null)}
         />
       )}
     </>
