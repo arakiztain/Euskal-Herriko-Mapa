@@ -111,7 +111,7 @@ export function SelectedMunicipalities({ isAuthenticated }) {
       ...provided,
       backgroundColor: '#1e1e1e',
       borderRadius: '6px',
-      marginTop: '4px',
+      marginTop: 4,
       boxShadow: 'none',
       zIndex: 10,
     }),
@@ -173,10 +173,10 @@ export function SelectedMunicipalities({ isAuthenticated }) {
 
   return (
     <div className="container">
-      <h2 className="title">Egondak</h2>
+      {/* <h2 className="title">Egondak</h2> */}
 
       <div className="section">
-        <h3 className="subtitle">Euskal Herria: {porcentajeTotalEH}%</h3>
+        <h1 className="subtitle">Euskal Herria: {porcentajeTotalEH}%</h1>
         <div className="progress-container">
           <div
             className="progress-bar"
@@ -187,22 +187,22 @@ export function SelectedMunicipalities({ isAuthenticated }) {
           />
         </div>
       </div>
-
+            <hr />
       {Object.entries(grouped).map(([province, list]) => (
         <div key={province} className="section">
-          <h3 className="subtitle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 className="subtitle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>{province}: {porcentajePorProvincia[province] || 0}%</span>
-            <span
+  {/*           <span
               style={{
-                width: '20px',
-                height: '20px',
+                width: 20,
+                height: 20,
                 borderRadius: '50%',
                 backgroundColor: provinceColors[province] || '#888',
                 display: 'inline-block',
               }}
               title={province}
-            />
-          </h3>
+            /> */}
+          </h2>
 
           <div className="progress-container">
             <div
@@ -218,7 +218,7 @@ export function SelectedMunicipalities({ isAuthenticated }) {
             <Select
               options={selectOptions(list)}
               isClearable
-              placeholder={`Busca o elimina municipio en ${province}`}
+              placeholder={`Bilatu edo ezabatu udalerriak ${province}n`}
               styles={customStyles}
               components={{ Option }}
               isSearchable

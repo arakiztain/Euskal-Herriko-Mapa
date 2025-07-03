@@ -113,17 +113,6 @@ p{
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-footer {
-  text-align: center;
-  background-color: #333;
-  color: #fff;
-  padding: 30px 0;
-  margin-top: auto;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10; 
-}
-
 .mainBlur {
   filter: blur(3px);
   pointer-events: none; /* Opcional para evitar clicks mientras modal abierto */
