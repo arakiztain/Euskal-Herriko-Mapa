@@ -6,12 +6,13 @@
 }
 
 .resultsList {
-    color: black;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
-  max-height: 180px;
+  max-height: 150px;
   overflow-y: auto;
   background: white;
   border: 1px solid #ccc;
@@ -23,6 +24,76 @@
   cursor: pointer;
 }
 
+.searchContainer {
+  position: relative;
+}
+
 .resultItem:hover {
   background-color: #eee;
 }
+
+.resultItem {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.resultItem:hover,
+.highlighted {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.inputButtonWrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.input {
+  flex-grow: 1;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.searchButton {
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #596e85;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.searchButton:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.error {
+  border: 2px solid red !important;
+}
+
+.errorButton {
+  background-color: #dc3545 !important; /* rojo */
+  color: white;
+}
+
+.errorButton:hover {
+  background-color: #b02a37 !important;
+}
+
+.noResults {
+  font-style: italic;
+  color: #999;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+

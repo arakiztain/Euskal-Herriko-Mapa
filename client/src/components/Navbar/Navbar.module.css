@@ -94,10 +94,9 @@
 
 .searchPlaceholder {
   width: 320px;
-  height: 40px; /* igual que el input de búsqueda */
+  height: 40px;
 }
 
-/* Estilos para el menú de usuario */
 .userMenu {
   position: relative;
   display: inline-block;
