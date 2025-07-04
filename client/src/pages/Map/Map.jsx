@@ -31,6 +31,7 @@ export default function MapPage() {
   return (
     <div className={styles.page}>
       <Navbar
+        showSearch={true}
         isAuthenticated={isAuthenticated}
         onLoginClick={() => setShowLogin(true)}
         onRegisterClick={() => setShowRegister(true)}
