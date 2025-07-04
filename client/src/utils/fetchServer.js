@@ -10,6 +10,16 @@ export const loginUser = async (email, password) => {
   return res.data; 
 };
 
+export const validateToken = async () => {
+  try {
+    const res = await api.get('/validate');
+    return res.data;
+  } catch (error) {
+    console.error('Token expired:', error);
+    return null;
+  }
+};
+
 export const getUserMunicipalities = async () => {
   try {
     const res = await api.get('/municipality/user');

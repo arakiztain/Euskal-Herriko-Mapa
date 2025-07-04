@@ -5,5 +5,6 @@ const router = Router();
 
 router.post("/login",authController.login);
 router.post("/register",authController.register);
+router.get("/validate", authController.validateToken);
 
 export default router
