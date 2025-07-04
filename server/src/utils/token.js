@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 function createToken(userData){
     const token = jwt.sign(
-        { _id: user._id, role: user.role },
+        { _id: user._id },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
     );

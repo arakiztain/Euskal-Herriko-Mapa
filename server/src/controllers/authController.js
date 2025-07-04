@@ -56,4 +56,20 @@ const register = async(req,res)=>{
     res.json({message:"User created"});
 }
 
-export default {login,register};
+const validateToken = (req, res) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return res.status(200).json({ valid: true, user: decoded });
+  } catch (err) {
+    return res.status(401).json({ error: "Token invalid or expired" });
+  }
+};
+
+export default {login,register, validateToken};
