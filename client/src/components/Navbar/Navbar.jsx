@@ -1,6 +1,6 @@
 import styles from "./Navbar.module.css";
 import logo from "../../assets/images/logo.png";
-import { SearchMunicipality } from "../SearchMunicipality";
+import { SearchMunicipality } from "../SearchMunicipality/SearchMunicipality";
 import { useState, useEffect, useRef } from "react";
 
 export function Navbar({ showSearch = false, isAuthenticated = false, onLoginClick, onRegisterClick }) {
