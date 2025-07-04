@@ -1,0 +1,28 @@
+
+.input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.resultsList {
+    color: black;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+}
+
+.resultItem {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.resultItem:hover {
+  background-color: #eee;
+}
