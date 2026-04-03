@@ -79,8 +79,8 @@ export function SelectedMunicipalities({ isAuthenticated }) {
             e.stopPropagation();
             handleRemove(data.value);
           }}
-          aria-label={`Eliminar ${data.label}`}
-          title={`Eliminar ${data.label}`}
+          aria-label={`${data.label} ezabatu`}
+          title={`${data.label} ezabatu`}
         >
           <FaTrashAlt size={14} color="#c00" />
         </button>

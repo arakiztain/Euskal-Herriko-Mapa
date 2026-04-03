@@ -31,16 +31,22 @@ const AuthProvider = ({ children }) => {
     checkToken();
   }, []);
 
-  const handleLogin = async (email, password) => {
-    try {
-      const result = await loginUser(email, password);
+const handleLogin = async (email, password) => {
+  try {
+    const result = await loginUser(email, password);
+
+    if (result.token && result.user) {
       localStorage.setItem("token", result.token);
-      setUserData({ user: result.user, token: result.token, email });
+      setUserData({ user: result.user, token: result.token });
       return null;
-    } catch (error) {
-      return error.message || "Error al iniciar sesión";
+    } else {
+      return "No se recibió token del backend";
     }
-  };
+
+  } catch (error) {
+    return error.response?.data?.error || "Error al iniciar sesión";
+  }
+};
 
   const handleLogout = () => {
     localStorage.removeItem("token");

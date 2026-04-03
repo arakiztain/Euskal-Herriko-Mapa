@@ -7,7 +7,12 @@ export const registerUser = async (username, email, password) => {
 
 export const loginUser = async (email, password) => {
   const res = await api.post('/login', { email, password });
-  return res.data; 
+
+  if (res.data.token) {
+    localStorage.setItem('token', res.data.token);
+  }
+
+  return res.data;
 };
 
 export const validateToken = async () => {
