@@ -1,6 +1,6 @@
 # 🗺️ Interactive Map of Euskal Herria
 
-![Euskal Herria SVG Map](mapa.svg)  
+![Euskal Herria SVG Map](server/mapa.svg)  
 *Interactive vector map with dynamic municipality highlighting and search functionality*
 
 ## 🌍 Project Description
